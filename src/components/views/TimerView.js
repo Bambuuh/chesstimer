@@ -19,10 +19,17 @@ class TimerView extends Component {
         if (this.interval) {
             clearInterval(this.interval)
         }
-        const newPlayer = this.getOtherPlayer(playerKey)
-        this.props.setActivePlayer(newPlayer)
-        this.props.updateTimer(newPlayer)
-        this.interval = setInterval(() => this.props.updateTimer(newPlayer), 1000)
+        const otherPlayer = this.getOtherPlayer(playerKey)
+        this.props.setActivePlayer(otherPlayer)
+        this.props.updateTimer(otherPlayer)
+
+        this.interval = setInterval(() => {
+            if (this.props.timers.winner) {
+                clearInterval(this.interval)
+            } else {
+                this.props.updateTimer(otherPlayer)
+            }
+        }, 1000)
     }
 
     getOtherPlayer(playerKey) {
@@ -56,11 +63,12 @@ class TimerView extends Component {
 
     isDisabled(playerKey) {
         const { timers } = this.props
-        return timers.paused || timers.activePlayer && timers.activePlayer !== playerKey
+        return !!timers.winner || timers.paused || timers.activePlayer && timers.activePlayer !== playerKey
     }
 
     getTimerStyle(playerKey) {
-        if (this.props.timers.activePlayer && this.props.timers.activePlayer !== playerKey) {
+        const { activePlayer, winner } = this.props.timers
+        if (!winner && activePlayer && activePlayer !== playerKey) {
             return { opacity: 0.3 }
         }
     }
@@ -83,7 +91,11 @@ class TimerView extends Component {
         } else {
             return (
                 <View style={styles.pauseButtonStyle}>
-                    <Button onPress={() => this.togglePausePress()}>Pause</Button>
+                {
+                    this.props.timers.winner
+                    ? <Button onPress={() => this.goBack()}>Back</Button>
+                    : <Button onPress={() => this.togglePausePress()}>Pause</Button>
+                }
                 </View>
             )
         }

@@ -4,13 +4,14 @@ import {Dispatch} from 'redux'
 
 const INITIAL_STATE = {
     playerOne: {
-        time: 300,
+        time: 3,
     },
     playerTwo: {
-        time: 300,
+        time: 3,
     },
     activePlayer: undefined,
-    paused: false
+    paused: false,
+    winner: undefined
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,6 +20,12 @@ export default (state = INITIAL_STATE, action) => {
 
         case UPDATE_TIMER:
             state[action.payload] = { ...state[action.payload], time: state[action.payload].time - 1 }
+            
+            
+            if (state[action.payload].time <= 0) {
+                state.winner = getOtherPlayer(action.payload)
+            }
+
             return { ...state }
         
         case SET_ACTIVE_PLAYER:

@@ -5,13 +5,6 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Button from './Button'
 
 class Timer extends Component {
-
-    constructor(props) {
-        super(props)
-
-        this.interval
-    }
-
     prettifyTime() {
         const { time } = this.props.timers[this.props.playerKey]
         const minutes = Math.floor(time / 60)
@@ -36,7 +29,7 @@ class Timer extends Component {
         return this.props.timers.activePlayer === undefined ? 'Start' : 'Stop'
     }
 
-    render () {
+    renderTimer() {
         return (
             <View style={this.props.style}>
                 <Text style={styles.timerStyles}> {this.prettifyTime()} </Text>
@@ -45,6 +38,19 @@ class Timer extends Component {
                 </Text>
             </View>
         )
+    }
+
+    renderResult() {
+        const text = this.props.timers[this.props.playerKey].time > 0 ? 'Winner': 'Loser'
+        return (
+            <View style={this.props.style}>
+                <Text style={styles.resultStyle}>{text}</Text>
+            </View>
+        )
+    }
+
+    render() {
+        return this.props.timers.winner ? this.renderResult() : this.renderTimer()
     }
 }
 
@@ -62,8 +68,11 @@ const styles = StyleSheet.create({
         color: '#f39c12',
         textAlign: 'center',
         fontSize: 40
+    },
+    resultStyle: {
+        fontSize: 80,
+        color: 'white'
     }
-
 })
 
 mapStateToProps = ({ timers }) => ({ timers })
