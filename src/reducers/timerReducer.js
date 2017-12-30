@@ -6,22 +6,11 @@ import {
     RESET_TIMERS,
     SET_TIMERS
 } from '../actions/types'
+import gameModes from './gameModes'
 
-import {Dispatch} from 'redux'
+const INITIAL_STATE = gameModes.suddenDeath
 
-const INITIAL_STATE = {
-    playerOne: {
-        time: 300,
-        moves: 0,
-    },
-    playerTwo: {
-        time: 300,
-        moves: 0,
-    },
-    activePlayer: undefined,
-    paused: false,
-    winner: undefined
-}
+
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -29,17 +18,17 @@ export default (state = INITIAL_STATE, action) => {
 
         case UPDATE_TIMER:
             state[action.payload] = { ...state[action.payload], time: state[action.payload].time - 1 }
-            
+
             if (state[action.payload].time <= 0) {
                 state.winner = getOtherPlayer(action.payload)
             }
 
             return { ...state }
-        
+
         case SET_ACTIVE_PLAYER:
             otherPlayer = getOtherPlayer(action.payload)
             state[otherPlayer] = { ...state[otherPlayer], moves: state[otherPlayer].moves + 1 }
-            return {...state, activePlayer: action.payload }
+            return { ...state, activePlayer: action.payload }
 
         case TOGGLE_PAUSED:
             return { ...state, paused: !state.paused }
@@ -53,7 +42,7 @@ export default (state = INITIAL_STATE, action) => {
             const convertedTime = convertTimerObj(action.payload)
 
             state.playerOne = { ...state.playerOne, time: convertedTime }
-            state.playerTwo = { ...state.playerTwo,  time: convertedTime }
+            state.playerTwo = { ...state.playerTwo, time: convertedTime }
             return { ...state }
         }
 
@@ -68,4 +57,8 @@ const convertTimerObj = (timerObj) => {
 
 const getOtherPlayer = (player) => {
     return player === 'playerOne' ? 'playerTwo' : 'playerOne'
+}
+
+const getGameMode = (key) => {
+
 }
