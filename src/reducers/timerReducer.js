@@ -12,9 +12,11 @@ import {Dispatch} from 'redux'
 const INITIAL_STATE = {
     playerOne: {
         time: 300,
+        moves: 0,
     },
     playerTwo: {
         time: 300,
+        moves: 0,
     },
     activePlayer: undefined,
     paused: false,
@@ -35,6 +37,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state }
         
         case SET_ACTIVE_PLAYER:
+            otherPlayer = getOtherPlayer(action.payload)
+            state[otherPlayer] = { ...state[otherPlayer], moves: state[otherPlayer].moves + 1 }
             return {...state, activePlayer: action.payload }
 
         case TOGGLE_PAUSED:

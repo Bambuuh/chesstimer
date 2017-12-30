@@ -41,6 +41,7 @@ class Timer extends Component {
     }
 
     renderTimer() {
+        console.log(this.props.timers)        
         return (
             <View style={this.props.style}>
                 <Text style={styles.timerStyles}> {this.prettifyTime()} </Text>
