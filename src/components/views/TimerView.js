@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Dimensions, Vibration } from 'react-native'
 
 import { updateTimer, setActivePlayer, togglePaused, resetTimers } from '../../actions/timerActions'
 
@@ -38,6 +38,7 @@ class TimerView extends Component {
 
     onPress(playerKey) {
         if (this.isActive(playerKey)) {
+            Vibration.vibrate(100)
             this.startTimer(playerKey)
         }
     }
