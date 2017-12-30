@@ -4,7 +4,8 @@ import {
     SET_ACTIVE_PLAYER,
     TOGGLE_PAUSED,
     RESET_TIMERS,
-    SET_TIMERS
+    SET_TIMERS,
+    SET_GAME_MODE
 } from '../actions/types'
 import gameModes from './gameModes'
 
@@ -45,6 +46,11 @@ export default (state = INITIAL_STATE, action) => {
             state.playerTwo = { ...state.playerTwo, time: convertedTime }
             return { ...state }
         }
+
+        case SET_GAME_MODE:
+        console.log(action.payload)
+            INITIAL_STATE = gameModes[action.payload]
+            return INITIAL_STATE
 
         default:
             return state

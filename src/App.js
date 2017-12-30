@@ -6,7 +6,7 @@ import { createStore } from 'redux'
 import reducers from './reducers'
 
 import StartView from './components/views/StartView'
-import SettingsView from './components/views/SettingsView'
+import ModeView from './components/views/ModeView'
 import TimerView from './components/views/TimerView'
 
 const store = createStore(reducers)
@@ -25,17 +25,29 @@ export default class App extends Component {
     }
   }
 
+  goToStart() {
+    this.setState({ view: 'start' })
+  }
+
+  goToTimers() {
+    this.setState({ view: 'timer' })
+  }
+
+  goToChangeMode() {
+    this.setState({ view: 'change mode' })
+  }
+
   renderView() {
     switch (this.state.view) {
-      case 'settings':
-        return <SettingsView />
+      case 'change mode':
+        return <ModeView goToStart={() => this.goToStart()} />
       case 'timer':
-        return <TimerView goBack={() => this.setState({ view: 'start' })} style={styles.viewStyles} />
+        return <TimerView goBack={() => this.goToStart()} style={styles.viewStyles} />
       default:
         return <StartView
           style={styles.viewStyles}
-          goToSettings={() => this.setState({ view: 'settings' })}
-          goToTimer={() => this.setState({ view: 'timer' })}
+          goToTimer={() => this.goToTimers()}
+          goToModeView={() => this.goToChangeMode()}
         />
     }
   }

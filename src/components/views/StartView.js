@@ -60,17 +60,18 @@ class StartView extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Text style={styles.modeStyle}>{this.props.timers.mode}</Text>
                 <View style={styles.pickerContainer}>
                 <Picker
-                        style={{ width: 50 }}
-                        itemStyle={{ color: '#f39c12' }}
+                        style={{ width: 50, height: 200 }}
+                        itemStyle={{ color: '#f39c12', fontSize: 20 }}
                         selectedValue={this.state.hours}
                         onValueChange={(hours) => this.setState({ hours })}>
                         {this.getHoursItems()}
                     </Picker>
                     <Text style={styles.commaStyle}>:</Text>
                     <Picker
-                        style={{ width: 50 }}
+                        style={{ width: 50, height: 200 }}
                         itemStyle={{ color: '#f39c12' }}
                         selectedValue={this.state.minutes}
                         onValueChange={(minutes) => this.setState({ minutes })}>
@@ -78,13 +79,16 @@ class StartView extends Component {
                     </Picker>
                     <Text style={styles.commaStyle}>:</Text>
                     <Picker
-                        style={{ width: 50 }}
+                        style={{ width: 50, height: 200 }}
                         itemStyle={{ color: '#f39c12' }}
                         selectedValue={this.state.seconds}
                         onValueChange={(seconds) => this.setState({ seconds })}>
                         {this.getSecondsItems()}
                     </Picker>
                 </View>
+                <Button style={styles.buttonStyles} onPress={() => this.props.goToModeView()}>
+                    Change mode
+                </Button>
                 <Button style={styles.buttonStyles} onPress={() => this.onPress()}>
                     Start
                 </Button>
@@ -101,21 +105,26 @@ const styles = StyleSheet.create({
     },
     pickerContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: 4
+        borderRadius: 4,
+        padding: 5
     },
     buttonStyles: {
-        marginVertical: 20
+        marginTop: 20
     },
     commaStyle: {
         fontSize: 20,
-        paddingBottom: 5,
+        paddingTop: 10,
+        color: '#f39c12'
+    },
+    modeStyle: {
+        fontSize: 30,
+        marginBottom: 20,
         color: '#f39c12'
     }
 })
 
+const mapStateToProps = ({ timers }) => ({ timers }) 
 
-
-export default connect(null, { setTimers })(StartView)
+export default connect(mapStateToProps, { setTimers })(StartView)

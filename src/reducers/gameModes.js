@@ -1,6 +1,7 @@
 export default {
     suddenDeath: {
-        mode: 'suddenDeath',
+        key: 'suddenDeath',
+        mode: 'Sudden death',
         playerOne: {
             time: 300,
             moves: 0,
@@ -17,7 +18,8 @@ export default {
         delay: undefined
     },
     hourGlass: {
-        mode: 'hourGlass',
+        key: 'hourGlass',
+        mode: 'Hourglass',
         playerOne: {
             time: 60,
             moves: 0,
@@ -34,7 +36,8 @@ export default {
         delay: undefined
     },
     overTime: {
-        mode: 'overTime',
+        key: 'overTime',
+        mode: 'Overtime',
         playerOne: {
             time: 1200,
             moves: 0,
@@ -55,7 +58,8 @@ export default {
         delay: undefined
     },
     increment: {
-        mode: 'incremnet',
+        key: 'increment',
+        mode: 'Increment',
         playerOne: {
             time: 5400,
             moves: 0,
@@ -73,7 +77,8 @@ export default {
         delay: undefined
     },
     delay: {
-        mode: 'delay',
+        key: 'delay',
+        mode: 'Delay',
         playerOne: {
             time: 5400,
             moves: 0,
