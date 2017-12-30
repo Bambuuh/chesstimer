@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, TouchableOpacity, StyleSheet, Picker } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 import { setTimers } from '../../actions/timerActions'
 
 import Button from '../Button'
+import Picker from '../Picker'
 
 class StartView extends Component {
 
@@ -16,40 +17,8 @@ class StartView extends Component {
             minutes: '05',
             seconds: '00'
         }
-    }
 
-    getHoursItems() {
-        const hours = []
-
-        for (let i = 0; i <= 99; i++) {
-            hours.push(i)
-        }
-
-        return hours.map(hour => <Picker.Item key={hour} label={this.prettifyNumber(hour)} value={this.prettifyNumber(hour)} />)
-    }
-
-    getMinutesItems() {
-        const minutes = []
-
-        for (let i = 0; i < 60; i++) {
-            minutes.push(i)
-        }
-
-        return minutes.map(minute => <Picker.Item key={minute} label={this.prettifyNumber(minute)} value={this.prettifyNumber(minute)} />)
-    }
-
-    getSecondsItems() {
-        const seconds = []
-
-        for (let i = 0; i < 60; i += 5) {
-            seconds.push(i)
-        }
-
-        return seconds.map(second => <Picker.Item key={second} label={this.prettifyNumber(second)} value={this.prettifyNumber(second)} />)
-    }
-
-    prettifyNumber(second) {
-        return second < 10 ? `0${second}` : `${second}`
+        this.updateValue.bind(this)
     }
 
     onPress() {
@@ -57,35 +26,32 @@ class StartView extends Component {
         this.props.goToTimer()
     }
 
+    renderSuddenDeathSettings() {
+        return <Picker time={this.state} onChange={(key, value) => this.updateValue(key,value)}/>
+    }
+
+    updateValue(key, value) {
+        const newState = {}
+        newState[key] = value
+        this.setState(newState)
+    }
+
+    renderSettings() {
+        switch (this.props.timers.mode) {
+            case 'Hourglass':
+            case 'Overtime':
+            case 'Increment':
+            case 'Delay':
+            default:
+                return this.renderSuddenDeathSettings()
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.modeStyle}>{this.props.timers.mode}</Text>
-                <View style={styles.pickerContainer}>
-                <Picker
-                        style={{ width: 50, height: 200 }}
-                        itemStyle={{ color: '#f39c12', fontSize: 20 }}
-                        selectedValue={this.state.hours}
-                        onValueChange={(hours) => this.setState({ hours })}>
-                        {this.getHoursItems()}
-                    </Picker>
-                    <Text style={styles.commaStyle}>:</Text>
-                    <Picker
-                        style={{ width: 50, height: 200 }}
-                        itemStyle={{ color: '#f39c12' }}
-                        selectedValue={this.state.minutes}
-                        onValueChange={(minutes) => this.setState({ minutes })}>
-                        {this.getMinutesItems()}
-                    </Picker>
-                    <Text style={styles.commaStyle}>:</Text>
-                    <Picker
-                        style={{ width: 50, height: 200 }}
-                        itemStyle={{ color: '#f39c12' }}
-                        selectedValue={this.state.seconds}
-                        onValueChange={(seconds) => this.setState({ seconds })}>
-                        {this.getSecondsItems()}
-                    </Picker>
-                </View>
+                {this.renderSettings()}
                 <Button style={styles.buttonStyles} onPress={() => this.props.goToModeView()}>
                     Change mode
                 </Button>
@@ -125,6 +91,6 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = ({ timers }) => ({ timers }) 
+const mapStateToProps = ({ timers }) => ({ timers })
 
 export default connect(mapStateToProps, { setTimers })(StartView)

@@ -1,23 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, Picker, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 
 import Button from '../Button'
 import gameModes from '../../reducers/gameModes'
 import { setGameMode } from '../../actions/timerActions'
 
+import Picker from '../Picker'
+
 class ModeView extends Component {
 
     constructor(props) {
         super(props)
-        console.log(this.props.currentMode)
-        this.state = {
-            selectedMode: this.props.currentMode
-        }
-    }
-
-    renderGameModes() {
-        return Object.keys(gameModes).map(key => <Picker.Item key={key} label={gameModes[key].mode} value={key} />)
+        this.state = { selectedMode: this.props.currentMode }
     }
 
     selectMode() {
@@ -25,17 +20,15 @@ class ModeView extends Component {
         this.props.goToStart()
     }
 
+    getItems() {
+        return Object.keys(gameModes).map(key => ({ label: gameModes[key].mode, value: key }))
+    }
+
     render() {
         return (
             <View style={styles.containerStyle}>
                 <Text style={styles.headerStyle}>Choose game mode</Text>
-                <Picker
-                    style={styles.pickerStyle}
-                    itemStyle={{ color: '#f39c12' }}
-                    selectedValue={this.state.selectedMode}
-                    onValueChange={(mode) => this.setState({ selectedMode: mode })}>
-                    {this.renderGameModes()}
-                </Picker>
+                <Picker selected={this.state.selectedMode} items={this.getItems()} onChange={(value) => this.setState({ selectedMode: value })} />
                 <Button style={styles.buttonStyle} onPress={() => this.selectMode()}>
                     Select
                 </Button>
@@ -50,11 +43,6 @@ class ModeView extends Component {
 const styles = StyleSheet.create({
     containerStyle: {
         alignItems: 'center'
-    },
-    pickerStyle: {
-        backgroundColor: 'white',
-        width: 200,
-        borderRadius: 4
     },
     headerStyle: {
         fontSize: 30,

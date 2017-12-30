@@ -48,7 +48,6 @@ export default (state = INITIAL_STATE, action) => {
         }
 
         case SET_GAME_MODE:
-        console.log(action.payload)
             INITIAL_STATE = gameModes[action.payload]
             return INITIAL_STATE
 
