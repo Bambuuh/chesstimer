@@ -18,13 +18,17 @@ export default class App extends Component {
 
     this.state = {
       view: 'start',
+      time: {
+        minutes: '5',
+        seconds: '00'
+      }
     }
   }
 
   renderView() {
     switch (this.state.view) {
       case 'settings':
-        return <Text>settings</Text>
+        return <SettingsView />
       case 'timer':
         return <TimerView goBack={() => this.setState({ view: 'start' })} style={styles.viewStyles} />
       default:

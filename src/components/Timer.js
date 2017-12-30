@@ -7,12 +7,23 @@ import Button from './Button'
 class Timer extends Component {
     prettifyTime() {
         const { time } = this.props.timers[this.props.playerKey]
-        const minutes = Math.floor(time / 60)
-        let seconds = time - minutes * 60
+        const hours = Math.floor(time/ 3600)
+        const minutes = Math.floor((time - (hours * 3600)) / 60)
+        const seconds = time - ((hours * 3600) + (minutes * 60))
 
-        seconds = `${seconds}`.length <= 1 ? `0${seconds}` : seconds
+        let final = ''
+        if (parseInt(hours) > 0){
+            final += `${this.prettifyNumber(hours)}:${this.prettifyNumber(minutes)}:`
+        } else if (parseInt(minutes)) {
+            final += `${this.prettifyNumber(minutes)}:`
+        }
 
-        return `${minutes}:${seconds}`
+        final += `${this.prettifyNumber(seconds)}`
+        return final
+    }
+
+    prettifyNumber(number) {
+        return number < 10 ? `0${number}` : number
     }
 
     onPress() {
