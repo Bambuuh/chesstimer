@@ -1,3 +1,5 @@
+import { Vibration } from 'react-native'
+
 import {
     UPDATE_TIMER,
     SET_ACTIVE_PLAYER,
@@ -10,13 +12,14 @@ import {
 } from '../actions/types'
 import gameModes from './gameModes'
 
-const INITIAL_STATE = gameModes.overtime
+const INITIAL_STATE = gameModes.suddenDeath
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case UPDATE_TIMER:
             state = getUpdatedTimer(state, action.payload)
             if (state[action.payload].time <= 0) {
+                Vibration.vibrate(500)
                 state.winner = getOtherPlayer(action.payload)
             }
             return { ...state }

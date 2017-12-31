@@ -34,7 +34,7 @@ class TimerView extends Component {
 
         let counter = 1
         this.interval = setInterval(() => {
-            if (timers.winner) {
+            if (this.props.timers.winner) {
                 clearInterval(this.interval)
             } else {
                 if (counter >= timers.delay) {
