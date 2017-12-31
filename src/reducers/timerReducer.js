@@ -10,7 +10,7 @@ import {
 } from '../actions/types'
 import gameModes from './gameModes'
 
-const INITIAL_STATE = gameModes.increment
+const INITIAL_STATE = gameModes.overtime
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -43,6 +43,21 @@ export default (state = INITIAL_STATE, action) => {
             const convertedTime = convertTimerObj(state.settings.baseTime)
             state.playerOne = { ...state.playerOne, time: convertedTime }
             state.playerTwo = { ...state.playerTwo, time: convertedTime }
+
+            if (state.settings.addedTime) {
+                if (state.mode === 'Delay') {
+                    state.delay = convertTimerObj(state.settings.addedTime)
+                } else {
+                    state.addTime = {
+                        time: convertTimerObj(state.settings.addedTime)
+                    }
+                }
+            }
+
+            if (state.settings.moveThreshold) {
+                state.addTime.threshold = state.settings.moveThreshold
+            }
+
             return { ...state }
 
         case SET_GAME_MODE:
@@ -65,7 +80,20 @@ const getUpdatedTimer = (state, payload) => {
 }
 
 const convertTimerObj = (timerObj) => {
-    return (parseInt(timerObj.hours) * 3600) + (parseInt(timerObj.minutes) * 60) + parseInt(timerObj.seconds)
+    let result = 0
+    if (timerObj.hours) {
+        result += (parseInt(timerObj.hours) * 3600)
+    }
+
+    if (timerObj.minutes) {
+        result += (parseInt(timerObj.minutes) * 60)
+    }
+
+    if (timerObj.seconds) {
+        result += parseInt(timerObj.seconds)
+    }
+
+    return result
 }
 
 const getOtherPlayer = (player) => {

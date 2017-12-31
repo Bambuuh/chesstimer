@@ -8,8 +8,8 @@ export default class OvertimeSettings extends Component {
     getMovesList() {
         const moves = []
 
-        for (let i = 5; i <= 100; i += 5) {
-            moves.push({ label: `${i}`, value: `${i}` })
+        for (let i = 1; i <= 999; i++) {
+            moves.push({ label: `${i}`, value: i })
         }
 
         return moves
@@ -30,7 +30,7 @@ export default class OvertimeSettings extends Component {
                     />
                 </View>
                 <View>
-                    <Text style={styles.settingsHeaderStyle}>Turns</Text>
+                    <Text style={styles.settingsHeaderStyle}>Moves</Text>
                     <Picker
                         style={{ marginHorizontal: 10 }}
                         items={this.getMovesList()}

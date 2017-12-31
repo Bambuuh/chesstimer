@@ -38,7 +38,7 @@ export const setGameMode = (gameMode) => ({
 
 export const changeTimerSettings = (settings) => ({
     type: CHANGE_TIMER_SETTINGS,
-    payload: setting
+    payload: settings
 })
 
 export const addTime = (player) => ({

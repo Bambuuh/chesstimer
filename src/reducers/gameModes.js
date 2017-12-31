@@ -19,7 +19,8 @@ export default {
         },
         activePlayer: undefined,
         paused: false,
-        winner: undefined
+        winner: undefined,
+        delay: 0
     },
     hourGlass: {
         key: 'hourGlass',
@@ -41,7 +42,8 @@ export default {
         },
         activePlayer: undefined,
         paused: false,
-        winner: undefined
+        winner: undefined,
+        delay: 0
     },
     overtime: {
         key: 'overtime',
@@ -71,9 +73,10 @@ export default {
         paused: false,
         winner: undefined,
         addTime: {
-            threshhold: 40,
+            threshold: 40,
             time: 1800
         },
+        delay: 0
     },
     increment: {
         key: 'increment',
@@ -100,9 +103,10 @@ export default {
         paused: false,
         winner: undefined,
         addTime: {
-            threshhold: 0,
+            threshold: 0,
             time: 10
         },
+        delay: 0
     },
     delay: {
         key: 'delay',
@@ -114,7 +118,6 @@ export default {
                 seconds: '00'
             },
             addedTime: {
-                minutes: '00',
                 seconds: '10'
             },
         },

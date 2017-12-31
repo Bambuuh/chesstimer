@@ -16,24 +16,32 @@ class TimerView extends Component {
     }
 
     startTimer(playerKey) {
+        const { timers } = this.props
         if (this.interval) {
             clearInterval(this.interval)
         }
         const otherPlayer = this.getOtherPlayer(playerKey)
 
-        if (this.props.timers.mode === 'Increment') {
+        if (timers.mode === 'Increment') {
             this.props.addTime(playerKey)
         }
-
         this.props.setActivePlayer(otherPlayer)
+
+        if (timers.addTime && timers[playerKey].moves === timers.addTime.threshold) {
+            this.props.addTime(playerKey)
+        }
         this.props.updateTimer(otherPlayer)
 
+        let counter = 1
         this.interval = setInterval(() => {
-            if (this.props.timers.winner) {
+            if (timers.winner) {
                 clearInterval(this.interval)
             } else {
-                this.props.updateTimer(otherPlayer)
+                if (counter >= timers.delay) {
+                    this.props.updateTimer(otherPlayer)
+                }
             }
+            counter ++
         }, 1000)
     }
 
@@ -89,9 +97,9 @@ class TimerView extends Component {
         if (this.props.timers.paused) {
             return (
                 <View style={styles.menuStyle}>
-                    <Button style={styles.menuButtonStyle} onPress={() => this.togglePausePress()}>Start</Button>
+                    <Button style={styles.menuButtonStyle} onPress={() => this.togglePausePress()}>Resume</Button>
                     <Button style={styles.menuButtonStyle} onPress={() => this.props.resetTimers()}>Reset</Button>
-                    <Button style={styles.menuButtonStyle} onPress={() => this.goBack()}>Back</Button>
+                    <Button style={styles.menuButtonStyle} onPress={() => this.goBack()}>Quit</Button>
                 </View>
             )
         } else {

@@ -23,6 +23,7 @@ export default class DelaySettings extends Component {
                         style={{ marginHorizontal: 10 }}
                         width={35}
                         fontSize={15}
+                        minSeconds = {1}
                         time={this.props.settings.addedTime}
                         onChange={(key, value) => this.props.updateValue('addedTime', value, key)}
                     />

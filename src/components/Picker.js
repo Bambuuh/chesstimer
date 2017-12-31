@@ -63,7 +63,7 @@ export default class CustomPicker extends Component {
     getSecondsItems() {
         const seconds = []
 
-        for (let i = 0; i < 60; i += 5) {
+        for (let i = this.props.minSeconds || 0; i < 60; i ++) {
             seconds.push(i)
         }
 
