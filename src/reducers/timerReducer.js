@@ -9,7 +9,7 @@ import {
 } from '../actions/types'
 import gameModes from './gameModes'
 
-const INITIAL_STATE = gameModes.overtime
+const INITIAL_STATE = gameModes.suddenDeath
 
 
 
@@ -18,7 +18,7 @@ export default (state = INITIAL_STATE, action) => {
         case TOGGLE_TIMER:
 
         case UPDATE_TIMER:
-            state[action.payload] = { ...state[action.payload], time: state[action.payload].time - 1 }
+            state = getUpdatedTimer(state, action.payload)
 
             if (state[action.payload].time <= 0) {
                 state.winner = getOtherPlayer(action.payload)
@@ -53,6 +53,12 @@ export default (state = INITIAL_STATE, action) => {
 
         default:
             return state
+    }
+}
+
+const getUpdatedTimer = (state, payload) => {
+    if (state.mode === 'Sudden death') {
+        return { ...state, [payload]: { ...state[payload], time: state[payload].time - 1 }}
     }
 }
 

@@ -26,8 +26,8 @@ export default class CustomPicker extends Component {
         )
     }
 
-    prettifyNumber(second) {
-        return second < 10 ? `0${second}` : `${second}`
+    prettifyNumber(number) {
+        return parseInt(number) < 10 ? `0${number}` : `${number}`
     }
 
     getFormat(key) {

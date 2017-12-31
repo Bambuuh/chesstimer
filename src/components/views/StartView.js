@@ -25,8 +25,6 @@ class StartView extends Component {
             },
             moveThreshold: 40
         }
-
-        this.updateValue.bind(this)
     }
 
     onPress() {
@@ -35,7 +33,7 @@ class StartView extends Component {
     }
 
     renderSuddenDeathSettings() {
-        return <Picker time={this.state.baseTime} onChange={(key, value) => this.updateValue(key, value)} />
+        return <Picker time={this.state.baseTime} onChange={(key, value) => this.updateValue('baseTime', key, value)} />
     }
 
     renderOvertimeSettings() {
@@ -98,6 +96,7 @@ class StartView extends Component {
     }
 
     updateValue(stateKey, key, value) {
+        console.log(stateKey, key, value)
         const newState = { ...this.state }
         newState[stateKey] = { ...newState[stateKey], [key]: value }
         this.setState(newState)
