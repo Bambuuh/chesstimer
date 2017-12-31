@@ -5,7 +5,7 @@ import { createStore } from 'redux'
 
 import reducers from './reducers'
 
-import StartView from './components/views/StartView'
+import StartView from './components/views/startView'
 import ModeView from './components/views/ModeView'
 import TimerView from './components/views/TimerView'
 
@@ -16,13 +16,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      view: 'start',
-      time: {
-        minutes: '5',
-        seconds: '00'
-      }
-    }
+    this.state = { view: 'start' }
   }
 
   goToStart() {

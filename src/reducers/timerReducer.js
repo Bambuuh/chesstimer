@@ -5,13 +5,12 @@ import {
     TOGGLE_PAUSED,
     RESET_TIMERS,
     SET_TIMERS,
-    SET_GAME_MODE
+    SET_GAME_MODE,
+    CHANGE_TIMER_SETTINGS
 } from '../actions/types'
 import gameModes from './gameModes'
 
-const INITIAL_STATE = gameModes.suddenDeath
-
-
+const INITIAL_STATE = gameModes.increment
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -34,18 +33,20 @@ export default (state = INITIAL_STATE, action) => {
         case TOGGLE_PAUSED:
             return { ...state, paused: !state.paused }
 
-        case RESET_TIMERS: {
+        case RESET_TIMERS:
             return INITIAL_STATE
-        }
 
-        case SET_TIMERS: {
+        case CHANGE_TIMER_SETTINGS:
+            settings = { ...action.payload }
+            return { ...state, settings }
 
-            const convertedTime = convertTimerObj(action.payload)
+        case SET_TIMERS:
+
+            const convertedTime = convertTimerObj(state.settings.baseTime)
 
             state.playerOne = { ...state.playerOne, time: convertedTime }
             state.playerTwo = { ...state.playerTwo, time: convertedTime }
             return { ...state }
-        }
 
         case SET_GAME_MODE:
             INITIAL_STATE = gameModes[action.payload]
@@ -58,7 +59,7 @@ export default (state = INITIAL_STATE, action) => {
 
 const getUpdatedTimer = (state, payload) => {
     if (state.mode === 'Sudden death') {
-        return { ...state, [payload]: { ...state[payload], time: state[payload].time - 1 }}
+        return { ...state, [payload]: { ...state[payload], time: state[payload].time - 1 } }
     }
 }
 
@@ -68,8 +69,4 @@ const convertTimerObj = (timerObj) => {
 
 const getOtherPlayer = (player) => {
     return player === 'playerOne' ? 'playerTwo' : 'playerOne'
-}
-
-const getGameMode = (key) => {
-
 }
