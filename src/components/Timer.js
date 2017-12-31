@@ -40,6 +40,15 @@ class Timer extends Component {
         return this.props.timers.activePlayer === undefined ? 'Start' : 'Stop'
     }
 
+    renderMoves() {
+        const { timers, playerKey } = this.props
+        let text = `Moves: ${timers[playerKey].moves}`
+        if (timers.addTime.threshold > 0 && timers[playerKey].moves < timers.addTime.threshold) {
+            text += ` / ${timers.addTime.threshold}`
+        }
+        return <Text style={styles.movesStyle}>{text}</Text>
+    }
+
     renderTimer() {
         return (
             <View style={this.props.style}>
@@ -47,6 +56,7 @@ class Timer extends Component {
                 <Text style={styles.textStyles}>
                     {this.getText()}
                 </Text>
+                {this.renderMoves()}
             </View>
         )
     }
@@ -83,6 +93,12 @@ const styles = StyleSheet.create({
     resultStyle: {
         fontSize: 80,
         color: 'white'
+    },
+    movesStyle: {
+        color: 'white',
+        textAlign: 'center',
+        marginTop: 20,
+        fontSize: 20
     }
 })
 
