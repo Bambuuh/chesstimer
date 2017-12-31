@@ -1,12 +1,12 @@
 import {
-    TOGGLE_TIMER,
     UPDATE_TIMER,
     SET_ACTIVE_PLAYER,
     TOGGLE_PAUSED,
     RESET_TIMERS,
     SET_TIMERS,
     SET_GAME_MODE,
-    CHANGE_TIMER_SETTINGS
+    CHANGE_TIMER_SETTINGS,
+    ADD_TIME
 } from '../actions/types'
 import gameModes from './gameModes'
 
@@ -14,15 +14,11 @@ const INITIAL_STATE = gameModes.increment
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case TOGGLE_TIMER:
-
         case UPDATE_TIMER:
             state = getUpdatedTimer(state, action.payload)
-
             if (state[action.payload].time <= 0) {
                 state.winner = getOtherPlayer(action.payload)
             }
-
             return { ...state }
 
         case SET_ACTIVE_PLAYER:
@@ -40,10 +36,11 @@ export default (state = INITIAL_STATE, action) => {
             settings = { ...action.payload }
             return { ...state, settings }
 
+        case ADD_TIME:
+            return { ...state, [action.payload]: { ...state[action.payload], time: state[action.payload].time + state.addTime.time } }
+
         case SET_TIMERS:
-
             const convertedTime = convertTimerObj(state.settings.baseTime)
-
             state.playerOne = { ...state.playerOne, time: convertedTime }
             state.playerTwo = { ...state.playerTwo, time: convertedTime }
             return { ...state }
@@ -58,16 +55,13 @@ export default (state = INITIAL_STATE, action) => {
 }
 
 const getUpdatedTimer = (state, payload) => {
-    if (state.mode === 'Sudden death') {
-        return { ...state, [payload]: { ...state[payload], time: state[payload].time - 1 } }
-    } else if (state.mode === 'Hourglass') {
+
+    if (state.mode === 'Hourglass') {
         const otherPlayer = getOtherPlayer(payload)
-        return {
-            ...state,
-            [payload]: { ...state[payload], time: state[payload].time - 1 },
-            [otherPlayer]: { ...state[otherPlayer], time: state[otherPlayer].time + 1 }
-        }
+        state[otherPlayer] = { ...state[otherPlayer], time: state[otherPlayer].time + 1 }
     }
+
+    return { ...state, [payload]: { ...state[payload], time: state[payload].time - 1 } }
 }
 
 const convertTimerObj = (timerObj) => {

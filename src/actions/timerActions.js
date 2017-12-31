@@ -1,18 +1,13 @@
 import {
-    TOGGLE_TIMER,
     UPDATE_TIMER,
     SET_ACTIVE_PLAYER,
     TOGGLE_PAUSED,
     RESET_TIMERS,
     SET_TIMERS,
     SET_GAME_MODE,
-    CHANGE_TIMER_SETTINGS
+    CHANGE_TIMER_SETTINGS,
+    ADD_TIME
 } from './types'
-
-export const toggleTimer = (player) => ({
-    type: TOGGLE_TIMER,
-    payload: player
-})
 
 export const updateTimer = (playerKey) => ({
     type: UPDATE_TIMER,
@@ -43,5 +38,10 @@ export const setGameMode = (gameMode) => ({
 
 export const changeTimerSettings = (settings) => ({
     type: CHANGE_TIMER_SETTINGS,
-    payload: settings
+    payload: setting
+})
+
+export const addTime = (player) => ({
+    type: ADD_TIME,
+    payload: player
 })

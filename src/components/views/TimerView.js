@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, StyleSheet, TouchableOpacity, Dimensions, Vibration } from 'react-native'
 
-import { updateTimer, setActivePlayer, togglePaused, resetTimers } from '../../actions/timerActions'
+import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime } from '../../actions/timerActions'
 
 import Timer from '../Timer'
 import Button from '../Button'
@@ -20,6 +20,11 @@ class TimerView extends Component {
             clearInterval(this.interval)
         }
         const otherPlayer = this.getOtherPlayer(playerKey)
+
+        if (this.props.timers.mode === 'Increment') {
+            this.props.addTime(playerKey)
+        }
+
         this.props.setActivePlayer(otherPlayer)
         this.props.updateTimer(otherPlayer)
 
@@ -172,4 +177,4 @@ const styles = StyleSheet.create({
 
 mapStateToProps = ({ timers }) => ({ timers })
 
-export default connect(mapStateToProps, { updateTimer, setActivePlayer, togglePaused, resetTimers })(TimerView)
+export default connect(mapStateToProps, { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime })(TimerView)

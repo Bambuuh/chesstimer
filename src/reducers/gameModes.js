@@ -60,11 +60,11 @@ export default {
             moveThreshold: 40
         },
         playerOne: {
-            time: 1200,
+            time: 12000,
             moves: 0
         },
         playerTwo: {
-            time: 1200,
+            time: 12000,
             moves: 0
         },
         activePlayer: undefined,
@@ -72,7 +72,7 @@ export default {
         winner: undefined,
         addTime: {
             threshhold: 40,
-            addTime: 1800
+            time: 1800
         },
     },
     increment: {
@@ -89,17 +89,20 @@ export default {
             },
         },
         playerOne: {
-            time: 5400,
+            time: 60,
             moves: 0
         },
         playerTwo: {
-            time: 5400,
+            time: 60,
             moves: 0
         },
         activePlayer: undefined,
         paused: false,
         winner: undefined,
-        increment: 10
+        addTime: {
+            threshhold: 0,
+            time: 10
+        },
     },
     delay: {
         key: 'delay',
