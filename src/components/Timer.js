@@ -43,7 +43,7 @@ class Timer extends Component {
     renderMoves() {
         const { timers, playerKey } = this.props
         let text = `Moves: ${timers[playerKey].moves}`
-        if (timers.addTime.threshold > 0 && timers[playerKey].moves < timers.addTime.threshold) {
+        if (timers.addTime && timers.addTime.threshold > 0 && timers[playerKey].moves < timers.addTime.threshold) {
             text += ` / ${timers.addTime.threshold}`
         }
         return <Text style={styles.movesStyle}>{text}</Text>
@@ -66,6 +66,7 @@ class Timer extends Component {
         return (
             <View style={this.props.style}>
                 <Text style={styles.resultStyle}>{text}</Text>
+                <Text style={styles.movesStyle}>in {this.props.timers[this.props.playerKey].moves} moves</Text>
             </View>
         )
     }
