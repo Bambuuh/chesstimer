@@ -96,7 +96,6 @@ class StartView extends Component {
     }
 
     updateValue(stateKey, key, value) {
-        console.log(stateKey, key, value)
         const newState = { ...this.state }
         newState[stateKey] = { ...newState[stateKey], [key]: value }
         this.setState(newState)
