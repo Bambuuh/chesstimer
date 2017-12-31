@@ -60,6 +60,13 @@ export default (state = INITIAL_STATE, action) => {
 const getUpdatedTimer = (state, payload) => {
     if (state.mode === 'Sudden death') {
         return { ...state, [payload]: { ...state[payload], time: state[payload].time - 1 } }
+    } else if (state.mode === 'Hourglass') {
+        const otherPlayer = getOtherPlayer(payload)
+        return {
+            ...state,
+            [payload]: { ...state[payload], time: state[payload].time - 1 },
+            [otherPlayer]: { ...state[otherPlayer], time: state[otherPlayer].time + 1 }
+        }
     }
 }
 
