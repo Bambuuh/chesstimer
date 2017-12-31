@@ -9,7 +9,7 @@ import {
 } from '../actions/types'
 import gameModes from './gameModes'
 
-const INITIAL_STATE = gameModes.suddenDeath
+const INITIAL_STATE = gameModes.overtime
 
 
 

@@ -35,8 +35,8 @@ export default {
         increment: undefined,
         delay: undefined
     },
-    overTime: {
-        key: 'overTime',
+    overtime: {
+        key: 'overtime',
         mode: 'Overtime',
         playerOne: {
             time: 1200,

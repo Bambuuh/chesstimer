@@ -13,35 +13,105 @@ class StartView extends Component {
         super(props)
 
         this.state = {
-            hours: '00',
-            minutes: '05',
-            seconds: '00'
+            baseTime: {
+                hours: '00',
+                minutes: '05',
+                seconds: '00',
+            },
+            timeToAdd: {
+                hours: '00',
+                minutes: '05',
+                seconds: '00',
+            },
+            moveThreshold: 40
         }
 
         this.updateValue.bind(this)
     }
 
     onPress() {
-        this.props.setTimers(this.state)
+        this.props.setTimers(this.state.baseTime)
         this.props.goToTimer()
     }
 
     renderSuddenDeathSettings() {
-        return <Picker time={this.state} onChange={(key, value) => this.updateValue(key,value)}/>
+        return <Picker time={this.state.baseTime} onChange={(key, value) => this.updateValue(key, value)} />
     }
 
-    updateValue(key, value) {
-        const newState = {}
-        newState[key] = value
+    renderOvertimeSettings() {
+        return (
+            <View style={{ flexDirection: 'row' }}>
+                <View>
+                    <Text style={styles.settingsHeaderStyle}>Base time</Text>
+                    <Picker style={{ marginHorizontal: 10 }} width={35} fontSize={15} time={this.state.baseTime} onChange={(key, value) => this.updateValue('baseTime', key, value)} />
+                </View>
+                <View>
+                    <Text style={styles.settingsHeaderStyle}>Turns</Text>
+                    <Picker style={{ marginHorizontal: 10 }} items={this.getMovesList()} width={35} fontSize={15} selected={this.state.moveThreshold} onChange={(value) => this.setState({ moveThreshold: value })} />
+                </View>
+                <View>
+                    <Text style={styles.settingsHeaderStyle}>Added</Text>
+                    <Picker style={{ marginHorizontal: 10 }} width={35} fontSize={15} time={this.state.timeToAdd} onChange={(key, value) => this.updateValue('timeToAdd', key, value)} />
+                </View>
+            </View>
+        )
+    }
+
+    renderIncrementSettings() {
+        return (
+            <View style={{ flexDirection: 'row' }}>
+                <View>
+                    <Text style={styles.settingsHeaderStyle}>Base time</Text>
+                    <Picker style={{ marginHorizontal: 10 }} width={35} fontSize={15} time={this.state.baseTime} onChange={(key, value) => this.updateValue('baseTime', key, value)} />
+                </View>
+                <View>
+                    <Text style={styles.settingsHeaderStyle}>Incremented</Text>
+                    <Picker style={{ marginHorizontal: 10 }} width={35} fontSize={15} time={this.state.timeToAdd} onChange={(key, value) => this.updateValue('timeToAdd', key, value)} />
+                </View>
+            </View>
+        )
+    }
+
+    renderDelaySettings() {
+        return (
+            <View style={{ flexDirection: 'row' }}>
+                <View>
+                    <Text style={styles.settingsHeaderStyle}>Base time</Text>
+                    <Picker style={{ marginHorizontal: 10 }} width={35} fontSize={15} time={this.state.baseTime} onChange={(key, value) => this.updateValue('baseTime', key, value)} />
+                </View>
+                <View>
+                    <Text style={styles.settingsHeaderStyle}>Delay</Text>
+                    <Picker style={{ marginHorizontal: 10 }} width={35} fontSize={15} time={this.state.timeToAdd} onChange={(key, value) => this.updateValue('timeToAdd', key, value)} />
+                </View>
+            </View>
+        )
+    }
+
+    getMovesList() {
+        const moves = []
+
+        for (let i = 5; i <= 100; i += 5) {
+            moves.push({ label: `${i}`, value: `${i}` })
+        }
+
+        return moves
+    }
+
+    updateValue(stateKey, key, value) {
+        const newState = { ...this.state }
+        newState[stateKey] = { ...newState[stateKey], [key]: value }
         this.setState(newState)
     }
 
     renderSettings() {
         switch (this.props.timers.mode) {
-            case 'Hourglass':
             case 'Overtime':
+                return this.renderOvertimeSettings()
             case 'Increment':
+                return this.renderIncrementSettings()
             case 'Delay':
+                return this.renderDelaySettings()
+            case 'Hourglass':
             default:
                 return this.renderSuddenDeathSettings()
         }
@@ -88,6 +158,11 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginBottom: 20,
         color: '#f39c12'
+    },
+    settingsHeaderStyle: {
+        marginBottom: 10,
+        color: '#f39c12',
+        textAlign: 'center'
     }
 })
 

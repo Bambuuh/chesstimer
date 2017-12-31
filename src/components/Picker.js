@@ -1,20 +1,22 @@
 import React, { Component } from 'react'
-import { View, Picker, StyleSheet } from 'react-native'
+import { View, Picker, StyleSheet, Text } from 'react-native'
 
 export default class CustomPicker extends Component {
 
     renderTimePicker() {
 
-
-        const pickers = Object.keys(this.props.time).map(key => (
-            <Picker
-                key={key}
-                style={{ width: this.props.width || 50, height: this.props.height || 200 }}
-                itemStyle={{ color: '#f39c12', fontSize: this.props.fontSize || 20 }}
-                selectedValue={this.props.time[key]}
-                onValueChange={(value) => this.props.onChange(key, value)}>
-                {this.getFormat(key)}
-            </Picker>
+        const list = Object.keys(this.props.time)
+        const pickers = list.map((key, index) => (
+            <View key={key} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Picker
+                    style={{ marginTop: -15, width: this.props.width || 50, height: this.props.height || 200 }}
+                    itemStyle={{ color: '#f39c12', fontSize: this.props.fontSize || 20 }}
+                    selectedValue={this.props.time[key]}
+                    onValueChange={(value) => this.props.onChange(key, value)}>
+                    {this.getFormat(key)}
+                </Picker>
+                {index === list.length - 1 || <Text style={styles.colonStyle}>:</Text>}
+            </View>
         ))
 
         return (
@@ -72,8 +74,8 @@ export default class CustomPicker extends Component {
         return (
             <View style={styles.pickerContainer}>
                 <Picker
-                    style={{ backgroundColor: 'white', width: this.props.width || 200, }}
-                    itemStyle={{ color: '#f39c12' }}
+                    style={{ marginTop: -15, width: this.props.width || 200, height: this.props.height || 200 }}
+                    itemStyle={{ color: '#f39c12', fontSize: this.props.fontSize || 20 }}
                     selectedValue={this.props.selected}
                     onValueChange={(value) => this.props.onChange(value)}>
                     {this.renderRegularItems()}
@@ -86,21 +88,28 @@ export default class CustomPicker extends Component {
         return this.props.items.map(item => <Picker.Item key={item.value} label={item.label} value={item.value} />)
     }
 
-    render() {
+    renderPicker() {
         if (this.props.time) {
             return this.renderTimePicker()
         } else {
             return this.renderRegularPicker()
         }
     }
+
+    render() {
+        return <View style={this.props.style}>{this.renderPicker()}</View>
+    }
 }
 
 const styles = StyleSheet.create({
     pickerContainer: {
+        height: 185,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: 4,
-        padding: 5
+        borderRadius: 4
     },
+    colonStyle: {
+        color: '#f39c12',
+    }
 })
