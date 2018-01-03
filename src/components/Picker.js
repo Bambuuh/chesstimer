@@ -1,19 +1,63 @@
 import React, { Component } from 'react'
-import { View, Picker, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, Platform } from 'react-native'
+
+import Picker from 'react-native-wheel-picker'
 
 export default class CustomPicker extends Component {
 
-    renderTimePicker() {
+    constructor(props) {
+        super(props)
 
+        if (this.props.time) {
+            const timers = {}
+            this.state = {
+                timers: {},
+                selected: {
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0,
+                }
+            }
+
+            const list = Object.keys(this.props.time)
+            list.forEach(key => {
+                this.state.timers[key] = this.getFormat(key)
+                this.state.selected[key] = this.state.timers[key].indexOf(this.props.time[key])
+            })
+        } else {
+            this.state = {
+                selected: this.getIndexOfItem(this.props.selected)
+            }
+        }
+        console.log(this.state)
+    }
+
+    getIndexOfItem(item) {
+        for (i = 0; i < this.props.items.length; i++) {
+            if (this.props.items[i].value === item) {
+                return i
+            }
+        }
+    }
+
+    onTimeChange(key, index) {
+        this.setState({ selected: { ...this.state.selected, [key]: index }})
+        this.props.onChange(key, this.state.timers[key][index])
+    }
+
+    renderTimePicker() {
         const list = Object.keys(this.props.time)
+        const marginTop = Platform.OS === 'ios' ? -25 : 0
         const pickers = list.map((key, index) => (
             <View key={key} style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Picker
-                    style={{ marginTop: -15, width: this.props.width || 50, height: this.props.height || 200 }}
+                textColor={'black'}
+                    style={{ marginTop, width: this.props.width || 50, height: this.props.height || baseHeight }}
                     itemStyle={{ color: '#f39c12', fontSize: this.props.fontSize || 20 }}
-                    selectedValue={this.props.time[key]}
-                    onValueChange={(value) => this.props.onChange(key, value)}>
-                    {this.getFormat(key)}
+                    selectedValue={this.state.selected[key]}
+                    onValueChange={(index) => this.onTimeChange(key, index)}
+                >
+                    {this.state.timers[key].map((value, i) => <Picker.Item key={value} label={value} value={i} />)}
                 </Picker>
                 {index === list.length - 1 || <Text style={styles.colonStyle}>:</Text>}
             </View>
@@ -31,53 +75,41 @@ export default class CustomPicker extends Component {
     }
 
     getFormat(key) {
+        let minVal = 0
+        let maxVal = 0
         if (key === 'hours') {
-            return this.getHoursItems()
+            maxVal = 99
         } else if (key === 'minutes') {
-            return this.getMinutesItems()
+            maxVal = 59
         } else {
-            return this.getSecondsItems()
+            minVal = this.props.minSeconds || 0
+            maxVal = 59
         }
+
+        const values = []
+
+        for (let i = minVal; i <= maxVal; i++) {
+            values.push(this.prettifyNumber(i))
+        }
+
+        return values
     }
 
-    getHoursItems() {
-        const hours = []
-
-        for (let i = 0; i <= 99; i++) {
-            hours.push(i)
-        }
-
-        return hours.map(hour => <Picker.Item key={hour} label={this.prettifyNumber(hour)} value={this.prettifyNumber(hour)} />)
-    }
-
-    getMinutesItems() {
-        const minutes = []
-
-        for (let i = 0; i < 60; i++) {
-            minutes.push(i)
-        }
-
-        return minutes.map(minute => <Picker.Item key={minute} label={this.prettifyNumber(minute)} value={this.prettifyNumber(minute)} />)
-    }
-
-    getSecondsItems() {
-        const seconds = []
-
-        for (let i = this.props.minSeconds || 0; i < 60; i ++) {
-            seconds.push(i)
-        }
-
-        return seconds.map(second => <Picker.Item key={second} label={this.prettifyNumber(second)} value={this.prettifyNumber(second)} />)
+    onRegularChange(index) {
+        this.setState({ selected: index })
+        this.props.onChange(this.props.items[index].value)
     }
 
     renderRegularPicker() {
+        console.log(this.state.selected)
+        const marginTop = Platform.OS === 'ios' ? -25 : 0
         return (
             <View style={styles.pickerContainer}>
                 <Picker
-                    style={{ marginTop: -15, width: this.props.width || 200, height: this.props.height || 200 }}
+                    style={{ marginTop, width: this.props.width || 185, height: this.props.height || baseHeight }}
                     itemStyle={{ color: '#f39c12', fontSize: this.props.fontSize || 20 }}
-                    selectedValue={this.props.selected}
-                    onValueChange={(value) => this.props.onChange(value)}>
+                    selectedValue={this.state.selected}
+                    onValueChange={(index) => this.onRegularChange(index)}>
                     {this.renderRegularItems()}
                 </Picker>
             </View>
@@ -85,7 +117,7 @@ export default class CustomPicker extends Component {
     }
 
     renderRegularItems() {
-        return this.props.items.map(item => <Picker.Item key={item.value} label={item.label} value={item.value} />)
+        return this.props.items.map((item, i) => <Picker.Item key={item.value} label={item.label} value={i} />)
     }
 
     renderPicker() {
@@ -100,6 +132,8 @@ export default class CustomPicker extends Component {
         return <View style={this.props.style}>{this.renderPicker()}</View>
     }
 }
+
+const baseHeight = 185
 
 const styles = StyleSheet.create({
     pickerContainer: {

@@ -34,7 +34,7 @@ export default class OvertimeSettings extends Component {
                     <Picker
                         style={{ marginHorizontal: 10 }}
                         items={this.getMovesList()}
-                        width={35}
+                        width={40}
                         fontSize={15}
                         selected={moveThreshold}
                         onChange={(value) => this.props.updateValue('moveThreshold', value)}
