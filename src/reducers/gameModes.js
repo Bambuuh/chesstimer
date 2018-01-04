@@ -1,20 +1,22 @@
 export default {
     suddenDeath: {
-        key: 'suddenDeath',
         mode: 'Sudden death',
-        settings: {
-            baseTime: {
-                hours: '00',
-                minutes: '05',
-                seconds: '00',
-            }
-        },
         playerOne: {
-            time: 300,
+            time: 300000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         playerTwo: {
-            time: 300,
+            time: 300000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         activePlayer: undefined,
@@ -23,21 +25,23 @@ export default {
         delay: 0
     },
     hourGlass: {
-        key: 'hourGlass',
         mode: 'Hourglass',
-        settings: {
-            baseTime: {
-                hours: '00',
-                minutes: '01',
-                seconds: '00'
-            },
-        },
         playerOne: {
-            time: 60,
+            time: 60000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         playerTwo: {
-            time: 60,
+            time: 60000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         activePlayer: undefined,
@@ -46,57 +50,52 @@ export default {
         delay: 0
     },
     overtime: {
-        key: 'overtime',
         mode: 'Overtime',
-        settings: {
-            baseTime: {
-                hours: '01',
-                minutes: '30',
-                seconds: '00'
-            },
-            addedTime: {
-                hours: '00',
-                minutes: '30',
-                seconds: '00'
-            },
-            moveThreshold: 40
-        },
         playerOne: {
-            time: 12000,
+            time: 12000000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         playerTwo: {
-            time: 12000,
+            time: 12000000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         activePlayer: undefined,
         paused: false,
         winner: undefined,
         addTime: {
-            threshold: 40,
-            time: 1800
+            threshold: 40000,
+            time: 1800000
         },
         delay: 0
     },
     increment: {
-        key: 'increment',
         mode: 'Increment',
-        settings: {
-            baseTime: {
-                hours: '00',
-                minutes: '01',
-                seconds: '00'
-            },
-            addedTime: {
-                seconds: '10'
-            },
-        },
         playerOne: {
-            time: 60,
+            time: 60000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         playerTwo: {
-            time: 60,
+            time: 60000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         activePlayer: undefined,
@@ -104,34 +103,33 @@ export default {
         winner: undefined,
         addTime: {
             threshold: 0,
-            time: 10
+            time: 10000
         },
         delay: 0
     },
     delay: {
-        key: 'delay',
         mode: 'Delay',
-        settings: {
-            baseTime: {
-                hours: '00',
-                minutes: '05',
-                seconds: '00'
-            },
-            addedTime: {
-                seconds: '10'
-            },
-        },
         playerOne: {
-            time: 5400,
+            time: 5400000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         playerTwo: {
-            time: 5400,
+            time: 5400000,
+            prettyTime: {
+                hours: '00',
+                minutes: '00',
+                seconds: '00',
+            },
             moves: 0
         },
         activePlayer: undefined,
         paused: false,
         winner: undefined,
-        delay: 10
+        delay: 10000
     }
 }

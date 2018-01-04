@@ -27,22 +27,29 @@ class TimerView extends Component {
         }
         this.props.setActivePlayer(otherPlayer)
 
-        if (timers.addTime && timers[playerKey].moves === timers.addTime.threshold) {
+        if (timers.addTime > 0 && timers[playerKey].moves + 1 === timers.settings.moveThreshold) {
             this.props.addTime(playerKey)
         }
-        this.props.updateTimer(otherPlayer)
 
-        let counter = 1
+        let lastUpdate = Date.now()
+        let counter = 0
         this.interval = setInterval(() => {
             if (this.props.timers.winner) {
                 clearInterval(this.interval)
             } else {
-                if (counter >= timers.delay) {
-                    this.props.updateTimer(otherPlayer)
+                const now = Date.now()
+                const delta = (now - lastUpdate)
+                lastUpdate = now
+                counter += delta
+                if (timers.mode === 'Delay') {
+                    if (counter >= timers.addTime) {
+                        this.props.updateTimer(otherPlayer, delta)
+                    }
+                } else {
+                    this.props.updateTimer(otherPlayer, delta)
                 }
             }
-            counter ++
-        }, 1000)
+        }, 50)
     }
 
     getOtherPlayer(playerKey) {
@@ -105,11 +112,11 @@ class TimerView extends Component {
         } else {
             return (
                 <View style={styles.pauseButtonStyle}>
-                {
-                    this.props.timers.winner
-                    ? <Button onPress={() => this.goBack()}>Back</Button>
-                    : <Button onPress={() => this.togglePausePress()}>Pause</Button>
-                }
+                    {
+                        this.props.timers.winner
+                            ? <Button onPress={() => this.goBack()}>Back</Button>
+                            : <Button onPress={() => this.togglePausePress()}>Pause</Button>
+                    }
                 </View>
             )
         }

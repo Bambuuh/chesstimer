@@ -3,32 +3,38 @@ import { connect } from 'react-redux'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 import Button from './Button'
+import { addMove } from '../actions/timerActions'
 
 class Timer extends Component {
-    prettifyTime() {
-        const { time } = this.props.timers[this.props.playerKey]
-        const hours = Math.floor(time/ 3600)
-        const minutes = Math.floor((time - (hours * 3600)) / 60)
-        const seconds = time - ((hours * 3600) + (minutes * 60))
 
-        let final = ''
-        if (parseInt(hours) > 0){
-            final += `${this.prettifyNumber(hours)}:${this.prettifyNumber(minutes)}:`
-        } else if (parseInt(minutes)) {
-            final += `${this.prettifyNumber(minutes)}:`
-        }
-
-        final += `${this.prettifyNumber(seconds)}`
-        return final
+    shouldComponentUpdate(nextProps) {
+        const a = nextProps.timers[nextProps.playerKey]
+        const b = this.props.timers[this.props.playerKey]
+        return this.compareTime(a.prettyTime, b.prettyTime) || a.moves !== b.moves
     }
 
-    prettifyNumber(number) {
-        return number < 10 ? `0${number}` : number
+    compareTime(a, b) {
+        return a.seconds !== b.seconds || a.minutes !== b.minutes || a.hours !== b.hours
+    }
+
+    getPrettyTime() {
+        const { prettyTime } = this.props.timers[this.props.playerKey]
+        let text = ''
+        if (parseInt(prettyTime.hours) > 0) {
+            text = `${prettyTime.hours}:${prettyTime.minutes}:`
+        } else if (parseInt(prettyTime.minutes) > 0) {
+            text = `${prettyTime.minutes}:`
+        }
+
+        text += prettyTime.seconds
+
+        return <Text>{text}</Text>
     }
 
     onPress() {
         if (this.isActive()) {
             this.props.onPress()
+            this.props.addMove(this.props.playerKey)
         }
     }
 
@@ -42,9 +48,10 @@ class Timer extends Component {
 
     renderMoves() {
         const { timers, playerKey } = this.props
+        const { moveThreshold } = timers.settings
         let text = `Moves: ${timers[playerKey].moves}`
-        if (timers.addTime && timers.addTime.threshold > 0 && timers[playerKey].moves < timers.addTime.threshold) {
-            text += ` / ${timers.addTime.threshold}`
+        if (moveThreshold > 0 && timers[playerKey].moves < moveThreshold) {
+            text += ` / ${moveThreshold}`
         }
         return <Text style={styles.movesStyle}>{text}</Text>
     }
@@ -52,7 +59,7 @@ class Timer extends Component {
     renderTimer() {
         return (
             <View style={this.props.style}>
-                <Text style={styles.timerStyles}> {this.prettifyTime()} </Text>
+                <Text style={styles.timerStyles}> {this.getPrettyTime()} </Text>
                 <Text style={styles.textStyles}>
                     {this.getText()}
                 </Text>
@@ -62,7 +69,7 @@ class Timer extends Component {
     }
 
     renderResult() {
-        const text = this.props.timers[this.props.playerKey].time > 0 ? 'Winner': 'Loser'
+        const text = this.props.timers[this.props.playerKey].time > 0 ? 'Winner' : 'Loser'
         return (
             <View style={this.props.style}>
                 <Text style={styles.resultStyle}>{text}</Text>
@@ -81,8 +88,8 @@ const styles = StyleSheet.create({
         flex: 1
     },
     timerStyles: {
+        fontFamily: 'Courier New',
         color: 'white',
-        textAlign: 'center',
         fontSize: 60,
         marginBottom: 20
     },
@@ -105,4 +112,4 @@ const styles = StyleSheet.create({
 
 mapStateToProps = ({ timers }) => ({ timers })
 
-export default connect(mapStateToProps)(Timer)
+export default connect(mapStateToProps, { addMove })(Timer)

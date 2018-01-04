@@ -12,7 +12,7 @@ import IncrementSettings from './incrementSettings'
 import DelaySettings from './delaySettings'
 
 class StartView extends Component {
-    onPress() {
+    start() {
         this.props.setTimers()
         this.props.goToTimer()
     }
@@ -66,7 +66,7 @@ class StartView extends Component {
                 <Button style={styles.buttonStyles} onPress={() => this.props.goToModeView()}>
                     Change mode
                 </Button>
-                <Button style={styles.buttonStyles} onPress={() => this.onPress()}>
+                <Button style={styles.buttonStyles} onPress={() => this.start()}>
                     Start
                 </Button>
             </View>

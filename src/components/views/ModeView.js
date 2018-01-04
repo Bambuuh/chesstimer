@@ -21,7 +21,7 @@ class ModeView extends Component {
     }
 
     getItems() {
-        return Object.keys(gameModes).map(key => ({ label: gameModes[key].mode, value: key }))
+        return ['Sudden death', 'Hourglass', 'Overtime', 'Increment', 'Delay'].map(mode => ({ label: mode, value: mode }))
     }
 
     render() {
@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = ({ timers }) => ({ currentMode: timers.key })
+const mapStateToProps = ({ timers }) => ({ currentMode: timers.mode })
 
 export default connect(mapStateToProps, { setGameMode })(ModeView)

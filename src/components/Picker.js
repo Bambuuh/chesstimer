@@ -29,7 +29,6 @@ export default class CustomPicker extends Component {
                 selected: this.getIndexOfItem(this.props.selected)
             }
         }
-        console.log(this.state)
     }
 
     getIndexOfItem(item) {
@@ -101,7 +100,6 @@ export default class CustomPicker extends Component {
     }
 
     renderRegularPicker() {
-        console.log(this.state.selected)
         const marginTop = Platform.OS === 'ios' ? -25 : 0
         return (
             <View style={styles.pickerContainer}>

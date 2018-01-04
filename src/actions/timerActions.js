@@ -6,12 +6,13 @@ import {
     SET_TIMERS,
     SET_GAME_MODE,
     CHANGE_TIMER_SETTINGS,
-    ADD_TIME
+    ADD_TIME,
+    ADD_MOVE
 } from './types'
 
-export const updateTimer = (playerKey) => ({
+export const updateTimer = (playerKey, time) => ({
     type: UPDATE_TIMER,
-    payload: playerKey
+    payload: { playerKey, time }
 })
 
 export const setActivePlayer = (playerKey) => ({
