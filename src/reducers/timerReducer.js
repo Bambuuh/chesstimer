@@ -9,11 +9,13 @@ import {
     SET_GAME_MODE,
     CHANGE_TIMER_SETTINGS,
     ADD_TIME,
-    ADD_MOVE
+    ADD_MOVE,
+    REDUCE_ADD_TIME
 } from '../actions/types'
-import gameModes from './gameModes'
 
-const INITIAL_STATE = getDefaultState('Sudden death')
+import getPrettyTimeObj from '../timePrettifier'
+
+const INITIAL_STATE = getDefaultState('Delay')
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -36,15 +38,19 @@ export default (state = INITIAL_STATE, action) => {
         case SET_ACTIVE_PLAYER:
             const newActivePlayerKey = action.payload
             const oldActivePlayerKey = getOtherPlayerKey(newActivePlayerKey)
-            state = { ...state, [newActivePlayerKey]: { ...state[newActivePlayerKey] }, [oldActivePlayerKey]: { ...state[oldActivePlayerKey] } }
-            state[oldActivePlayerKey].moves++
-            state.activePlayer = newActivePlayerKey
-            return state
+            return {
+                ...state,
+                [newActivePlayerKey]: { ...state[newActivePlayerKey] },
+                [oldActivePlayerKey]: { ...state[oldActivePlayerKey], moves: state[oldActivePlayerKey].moves + 1 },
+                activePlayer: newActivePlayerKey,
+                addTime: convertTimerObj(state.settings.addedTime)
+            }
 
         case TOGGLE_PAUSED:
             return { ...state, paused: !state.paused }
 
         case RESET_TIMERS:
+        console.log(INITIAL_STATE)
             return { ...INITIAL_STATE }
 
         case CHANGE_TIMER_SETTINGS:
@@ -73,6 +79,9 @@ export default (state = INITIAL_STATE, action) => {
         case SET_GAME_MODE:
             INITIAL_STATE = getDefaultState(action.payload)
             return { ...INITIAL_STATE }
+
+        case REDUCE_ADD_TIME:
+            return { ...state, addTime: state.addTime - action.payload }
 
         default:
             return state
@@ -108,26 +117,6 @@ const convertTimerObj = (timerObj) => {
 const getOtherPlayerKey = (player) => {
     return player === 'playerOne' ? 'playerTwo' : 'playerOne'
 }
-
-const getPrettyTimeObj = (time) => {
-    const hours = getHours(time)
-    const minutes = getMinutes(time)
-    const seconds = getSeconds(time)
-
-    return {
-        hours: prettifyNumber(hours),
-        minutes: prettifyNumber(minutes),
-        seconds: prettifyNumber(seconds)
-    }
-}
-
-const getHours = (time) => Math.floor(time / 3600000)
-
-const getMinutes = (time) => Math.floor((time - (getHours(time) * 3600000)) / 60000)
-
-const getSeconds = (time) => Math.floor((time - ((getHours(time) * 3600000) + (getMinutes(time) * 60000))) / 1000)
-
-const prettifyNumber = (number) => number < 10 ? `0${number}` : `${number}`
 
 function getDefaultState(mode) {
     return {

@@ -7,7 +7,7 @@ import {
     SET_GAME_MODE,
     CHANGE_TIMER_SETTINGS,
     ADD_TIME,
-    ADD_MOVE
+    REDUCE_ADD_TIME    
 } from './types'
 
 export const updateTimer = (playerKey, time) => ({
@@ -45,4 +45,9 @@ export const changeTimerSettings = (settings) => ({
 export const addTime = (player) => ({
     type: ADD_TIME,
     payload: player
+})
+
+export const reduceAddTime = (time) => ({
+    type: REDUCE_ADD_TIME,
+    payload: time
 })

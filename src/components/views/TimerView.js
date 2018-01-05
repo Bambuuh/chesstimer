@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, StyleSheet, TouchableOpacity, Dimensions, Vibration } from 'react-native'
 
-import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime } from '../../actions/timerActions'
+import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime } from '../../actions/timerActions'
 
 import Timer from '../Timer'
 import Button from '../Button'
@@ -13,10 +13,16 @@ class TimerView extends Component {
         super(props)
 
         this.interval
+        this.state = { delay: 0 }
+    }
+
+    reduceDelay(time) {
+        this.setState({ delay: this.state.delay - time })
     }
 
     startTimer(playerKey) {
         const { timers } = this.props
+        this.setState({ delay: this.props.timers.addTime })
         if (this.interval) {
             clearInterval(this.interval)
         }
@@ -32,7 +38,7 @@ class TimerView extends Component {
         }
 
         let lastUpdate = Date.now()
-        let counter = 0
+
         this.interval = setInterval(() => {
             if (this.props.timers.winner) {
                 clearInterval(this.interval)
@@ -40,9 +46,10 @@ class TimerView extends Component {
                 const now = Date.now()
                 const delta = (now - lastUpdate)
                 lastUpdate = now
-                counter += delta
                 if (timers.mode === 'Delay') {
-                    if (counter >= timers.addTime) {
+                    if (this.state.delay > 0) {
+                        this.reduceDelay(delta)
+                    } else {
                         this.props.updateTimer(otherPlayer, delta)
                     }
                 } else {
@@ -136,7 +143,7 @@ class TimerView extends Component {
                 onPress={() => this.onPress(playerKey)}
             >
                 <View style={this.getTimerStyle(playerKey)}>
-                    <Timer style={rotation} playerKey={playerKey} />
+                    <Timer delay={this.state.delay} style={rotation} playerKey={playerKey} />
                 </View>
             </TouchableOpacity>
         )
@@ -192,4 +199,11 @@ const styles = StyleSheet.create({
 
 mapStateToProps = ({ timers }) => ({ timers })
 
-export default connect(mapStateToProps, { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime })(TimerView)
+export default connect(mapStateToProps, {
+    updateTimer,
+    setActivePlayer,
+    togglePaused,
+    resetTimers,
+    addTime,
+    reduceAddTime
+})(TimerView)

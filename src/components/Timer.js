@@ -4,29 +4,39 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 import Button from './Button'
 import { addMove } from '../actions/timerActions'
+import timePrettifier, { getSeconds } from '../timePrettifier'
 
 class Timer extends Component {
 
     shouldComponentUpdate(nextProps) {
         const a = nextProps.timers[nextProps.playerKey]
         const b = this.props.timers[this.props.playerKey]
-        return this.compareTime(a.prettyTime, b.prettyTime) || a.moves !== b.moves
+
+        const baseTimeChanged = this.compareTimeObj(a.prettyTime, b.prettyTime)
+        const movesChanged = a.moves !== b.moves
+        const delayChanged = this.compareDelay(nextProps.delay, this.props.delay)
+        const activePlayerChanged = nextProps.timers.activePlayer !== this.props.timers.activePlayer
+
+        return baseTimeChanged || movesChanged || delayChanged || activePlayerChanged 
     }
 
-    compareTime(a, b) {
+    compareDelay(a, b) {
+        return getSeconds(a) !== getSeconds(b)
+    }
+
+    compareTimeObj(a, b) {
         return a.seconds !== b.seconds || a.minutes !== b.minutes || a.hours !== b.hours
     }
 
-    getPrettyTime() {
-        const { prettyTime } = this.props.timers[this.props.playerKey]
+    getPrettyTime(timeObj) {
         let text = ''
-        if (parseInt(prettyTime.hours) > 0) {
-            text = `${prettyTime.hours}:${prettyTime.minutes}:`
-        } else if (parseInt(prettyTime.minutes) > 0) {
-            text = `${prettyTime.minutes}:`
+        if (parseInt(timeObj.hours) > 0) {
+            text = `${timeObj.hours}:${timeObj.minutes}:`
+        } else if (parseInt(timeObj.minutes) > 0) {
+            text = `${timeObj.minutes}:`
         }
 
-        text += prettyTime.seconds
+        text += timeObj.seconds
 
         return <Text>{text}</Text>
     }
@@ -56,10 +66,25 @@ class Timer extends Component {
         return <Text style={styles.movesStyle}>{text}</Text>
     }
 
+    renderDelay() {
+        const { delay, timers, playerKey } = this.props
+        if (delay > 0 && timers.activePlayer === playerKey && timers.mode === 'Delay') {
+            const prettyDelay = timePrettifier(delay)
+            return <Text style={styles.delayStyle}>{this.getPrettyTime(prettyDelay)}</Text>
+        } else {
+            return <Text style={styles.delayStyle}> </Text>
+        }
+    }
+
     renderTimer() {
+        const { timers, playerKey, style } = this.props
+        console.log('rendering')
         return (
-            <View style={this.props.style}>
-                <Text style={styles.timerStyles}> {this.getPrettyTime()} </Text>
+            <View style={style}>
+                <View style={{ position: 'relative' }}>
+                    {this.renderDelay()}
+                    <Text style={styles.timerStyles}> {this.getPrettyTime(timers[playerKey].prettyTime)} </Text>
+                </View>
                 <Text style={styles.textStyles}>
                     {this.getText()}
                 </Text>
@@ -86,6 +111,16 @@ class Timer extends Component {
 const styles = StyleSheet.create({
     containerStyle: {
         flex: 1
+    },
+    delayStyle: {
+        fontFamily: 'Courier New',
+        textAlign: 'center',
+        color: '#f39c12',
+        fontSize: 20,
+        position: 'absolute',
+        top: -20,
+        left: 0,
+        right: 0
     },
     timerStyles: {
         fontFamily: 'Courier New',
