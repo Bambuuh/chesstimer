@@ -40,11 +40,12 @@ export default (state = INITIAL_STATE, action) => {
             const oldActivePlayerKey = getOtherPlayerKey(newActivePlayerKey)
             return {
                 ...state,
-                [newActivePlayerKey]: { ...state[newActivePlayerKey] },
-                [oldActivePlayerKey]: { ...state[oldActivePlayerKey], moves: state[oldActivePlayerKey].moves + 1 },
                 activePlayer: newActivePlayerKey,
                 addTime: convertTimerObj(state.settings.addedTime)
             }
+
+        case ADD_MOVE:
+            return { ...state, [action.payload]: { ...state[action.payload], moves: state[action.payload].moves + 1} }
 
         case TOGGLE_PAUSED:
             return { ...state, paused: !state.paused }

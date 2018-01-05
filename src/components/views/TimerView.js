@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration } from 'react-native'
 
-import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime } from '../../actions/timerActions'
+import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove } from '../../actions/timerActions'
 
 import Timer from '../Timer'
 import Button from '../Button'
@@ -67,8 +67,10 @@ class TimerView extends Component {
 
     onPress(playerKey) {
         if (this.isActive(playerKey)) {
-            Vibration.vibrate(100)
+            this.props.addMove(playerKey)
             this.startTimer(playerKey)
+            Vibration.vibrate(100)
+            
         }
     }
 
@@ -223,5 +225,6 @@ export default connect(mapStateToProps, {
     togglePaused,
     resetTimers,
     addTime,
-    reduceAddTime
+    reduceAddTime,
+    addMove
 })(TimerView)

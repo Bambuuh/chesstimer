@@ -17,7 +17,7 @@ class Timer extends Component {
         const delayChanged = this.compareDelay(nextProps.delay, this.props.delay)
         const activePlayerChanged = nextProps.timers.activePlayer !== this.props.timers.activePlayer
 
-        return baseTimeChanged || movesChanged || delayChanged || activePlayerChanged 
+        return baseTimeChanged || movesChanged || delayChanged || activePlayerChanged
     }
 
     compareDelay(a, b) {
@@ -79,14 +79,12 @@ class Timer extends Component {
     renderTimer() {
         const { timers, playerKey, style } = this.props
         return (
-            <View style={style}>
+            <View style={[{width: '100%'}, style]}>
                 <View style={{ position: 'relative' }}>
+                    {!this.props.timers.activePlayer && <Text style={[styles.startTextStyle]}>Tap to start</Text>}
                     {this.renderDelay()}
                     <Text style={styles.timerStyles}> {this.getPrettyTime(timers[playerKey].prettyTime)} </Text>
                 </View>
-                <Text style={styles.textStyles}>
-                    {this.getText()}
-                </Text>
                 {this.renderMoves()}
             </View>
         )
@@ -113,6 +111,7 @@ const styles = StyleSheet.create({
     },
     delayStyle: {
         fontFamily: 'Courier New',
+        backgroundColor: 'rgba(0,0,0,0)',
         textAlign: 'center',
         color: '#f39c12',
         fontSize: 20,
@@ -121,8 +120,19 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0
     },
+    startTextStyle: {
+        fontFamily: 'Courier New',
+        textAlign: 'center',
+        color: '#f39c12',
+        fontSize: 30,
+        position: 'absolute',
+        top: -40,
+        left: 0,
+        right: 0
+    },
     timerStyles: {
         fontFamily: 'Courier New',
+        backgroundColor: 'rgba(0,0,0,0)',
         color: 'white',
         fontSize: 60,
         marginBottom: 20
@@ -139,7 +149,6 @@ const styles = StyleSheet.create({
     movesStyle: {
         color: 'white',
         textAlign: 'center',
-        marginTop: 20,
         fontSize: 20
     }
 })
