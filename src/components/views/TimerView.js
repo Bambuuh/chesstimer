@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration, StatusBar } from 'react-native'
 
 import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove } from '../../actions/timerActions'
 
@@ -153,7 +153,7 @@ class TimerView extends Component {
                 disabled={this.isDisabled(playerKey)}
                 onPress={() => this.onPress(playerKey)}
             >
-                <View style={this.getTimerStyle(playerKey)}>
+                <View style={[{ width: '100%', height: '100%', padding: 40}, this.getTimerStyle(playerKey)]}>
                     <Timer delay={this.state.delay} style={rotation} playerKey={playerKey} />
                 </View>
             </TouchableOpacity>
@@ -166,21 +166,26 @@ class TimerView extends Component {
             <View style={styles.containerStyles}>
                 <View style={[styles.timerContainer, this.getTimerContainerStyle()]}>
                     {this.renderTimerView('playerOne', true)}
-                    {this.renderTimerView('playerTwo', false)}
                 </View>
                 {this.renderMenu()}
+                <View style={[styles.timerContainer, this.getTimerContainerStyle()]}>
+                    {this.renderTimerView('playerTwo', false)}
+                </View>
                 {this.state.showDialog && this.renderDialog()}
             </View>
         )
     }
 }
 
+const menuHeight = 50
+const timerHeight = (Dimensions.get('window').height / 2) - (menuHeight / 2) - (StatusBar.currentHeight / 2 || 0) 
+
 const styles = StyleSheet.create({
     touchableStyles: {
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        height: '50%'
+        height: '100%'
     },
     containerStyles: {
         width: '100%',
@@ -188,7 +193,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     timerContainer: {
-        flex: 1
+        width: '100%',
+        height: timerHeight
     },
     pauseButtonStyle: {
         position: 'absolute',
@@ -196,11 +202,9 @@ const styles = StyleSheet.create({
         top: (Dimensions.get('window').height / 2) - 25,
     },
     menuStyle: {
-        position: 'absolute',
+        height: menuHeight,
+        width: '100%',
         flexDirection: 'row',
-        left: 0,
-        right: 0,
-        top: (Dimensions.get('window').height / 2) - 25,
         alignItems: 'center',
         justifyContent: 'space-around'
     },

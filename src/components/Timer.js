@@ -79,9 +79,8 @@ class Timer extends Component {
     renderTimer() {
         const { timers, playerKey, style } = this.props
         return (
-            <View style={[{width: '100%'}, style]}>
+            <View style={[{ backgroundColor: '#34495e', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', borderRadius: 4  }, style]}>
                 <View style={{ position: 'relative' }}>
-                    {!this.props.timers.activePlayer && <Text style={[styles.startTextStyle]}>Tap to start</Text>}
                     {this.renderDelay()}
                     <Text style={styles.timerStyles}> {this.getPrettyTime(timers[playerKey].prettyTime)} </Text>
                 </View>
@@ -114,9 +113,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0)',
         textAlign: 'center',
         color: '#f39c12',
-        fontSize: 20,
+        fontSize: 30,
         position: 'absolute',
-        top: -20,
+        top: -30,
         left: 0,
         right: 0
     },

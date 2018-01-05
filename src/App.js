@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 
@@ -48,8 +48,11 @@ export default class App extends Component {
 
   render() {
     return (
-      <Provider style={{ flex: 1}} store={store}>
+      <Provider style={{ flex: 1 }} store={store}>
         <View style={styles.container}>
+          <StatusBar
+            hidden
+          />
           {this.renderView()}
         </View>
       </Provider>
