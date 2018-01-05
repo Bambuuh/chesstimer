@@ -16,8 +16,9 @@ class Timer extends Component {
         const movesChanged = a.moves !== b.moves
         const delayChanged = this.compareDelay(nextProps.delay, this.props.delay)
         const activePlayerChanged = nextProps.timers.activePlayer !== this.props.timers.activePlayer
+        const someoneWon = nextProps.timers.winner !== this.props.timers.winner
 
-        return baseTimeChanged || movesChanged || delayChanged || activePlayerChanged
+        return baseTimeChanged || movesChanged || delayChanged || activePlayerChanged || someoneWon
     }
 
     compareDelay(a, b) {
@@ -92,7 +93,7 @@ class Timer extends Component {
     renderResult() {
         const text = this.props.timers[this.props.playerKey].time > 0 ? 'Winner' : 'Loser'
         return (
-            <View style={this.props.style}>
+            <View style={[{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }, this.props.style]}>
                 <Text style={styles.resultStyle}>{text}</Text>
                 <Text style={styles.movesStyle}>in {this.props.timers[this.props.playerKey].moves} moves</Text>
             </View>

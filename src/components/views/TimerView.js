@@ -15,7 +15,7 @@ class TimerView extends Component {
         super(props)
 
         this.interval
-        this.state = { delay: 0, showDialog: false }
+        this.state = { delay: 0, showReset: false, showBack: false }
     }
 
     reduceDelay(time) {
@@ -70,11 +70,14 @@ class TimerView extends Component {
             this.props.addMove(playerKey)
             this.startTimer(playerKey)
             Vibration.vibrate(100)
-            
+
         }
     }
 
     togglePausePress() {
+        if (this.props.timers.winner || !this.props.timers.activePlayer) {
+            return;
+        }
         this.props.togglePaused()
         if (this.props.timers.paused) {
             if (this.props.timers.activePlayer) {
@@ -115,26 +118,53 @@ class TimerView extends Component {
         const pausePlayIcon = this.props.timers.paused ? 'play' : 'pause'
         return (
             <View style={styles.menuStyle}>
-                <IconButton name="undo" onPress={() => this.toggleDialog()} />
+                <IconButton name="undo" onPress={() => this.onResetPress()} />
                 <IconButton name={pausePlayIcon} onPress={() => this.togglePausePress()} />
-                <IconButton name="home" onPress={() => this.goBack()} />
+                <IconButton name="home" onPress={() => this.onHomePress()} />
             </View>
         )
     }
 
-    renderDialog() {
-        const resetTimers = () => {
+    onResetPress() {
+        if (!this.props.timers.winner && this.props.timers.activePlayer) {
+            this.showReset()
+        } else {
             this.props.resetTimers()
-            this.toggleDialog()
         }
-        return <Dialog text="Reset?" onAccept={() => resetTimers()} onDecline={() => this.toggleDialog()} />
     }
 
-    toggleDialog() {
-        if (!this.props.timers.paused) {
+    onHomePress() {
+        if (!this.props.timers.winner && this.props.timers.activePlayer) {
+            this.showBack()
+        } else {
+            this.goBack()
+        }
+    }
+
+    renderResetDialog() {
+        const resetTimers = () => {
+            this.props.resetTimers()
+            this.showReset()
+        }
+        return <Dialog text="Reset?" onAccept={() => resetTimers()} onDecline={() => this.showReset()} />
+    }
+
+    renderBackDialog() {
+        return <Dialog text="Back to start?" onAccept={() => this.goBack()} onDecline={() => this.showBack()} />
+    }
+
+    showReset() {
+        if (!this.props.timers.paused && this.props.timers.activePlayer) {
             this.togglePausePress()
         }
-        this.setState({ showDialog: !this.state.showDialog })
+        this.setState({ showReset: !this.state.showReset })
+    }
+
+    showBack() {
+        if (!this.props.timers.paused && this.props.timers.activePlayer) {
+            this.togglePausePress()
+        }
+        this.setState({ showBack: !this.state.showBack })
     }
 
     goBack() {
@@ -153,7 +183,7 @@ class TimerView extends Component {
                 disabled={this.isDisabled(playerKey)}
                 onPress={() => this.onPress(playerKey)}
             >
-                <View style={[{ width: '100%', height: '100%', padding: 40}, this.getTimerStyle(playerKey)]}>
+                <View style={[{ width: '100%', height: '100%', padding: 40 }, this.getTimerStyle(playerKey)]}>
                     <Timer delay={this.state.delay} style={rotation} playerKey={playerKey} />
                 </View>
             </TouchableOpacity>
@@ -171,14 +201,15 @@ class TimerView extends Component {
                 <View style={[styles.timerContainer, this.getTimerContainerStyle()]}>
                     {this.renderTimerView('playerTwo', false)}
                 </View>
-                {this.state.showDialog && this.renderDialog()}
+                {this.state.showReset && this.renderResetDialog()}
+                {this.state.showBack && this.renderBackDialog()}
             </View>
         )
     }
 }
 
 const menuHeight = 50
-const timerHeight = (Dimensions.get('window').height / 2) - (menuHeight / 2) - (StatusBar.currentHeight / 2 || 0) 
+const timerHeight = (Dimensions.get('window').height / 2) - (menuHeight / 2) - (StatusBar.currentHeight / 2 || 0)
 
 const styles = StyleSheet.create({
     touchableStyles: {

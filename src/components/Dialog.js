@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 
 import IconButton from './IconButton'
 
@@ -8,13 +8,15 @@ export default class Dialog extends Component {
     render() {
         return (
             <TouchableOpacity style={styles.backgroundStyle} onPress={this.props.onDecline}>
-                <View style={styles.containerStyle}>
-                    <Text style={styles.textStyle}>{this.props.text}</Text>
-                    <View style={{ flexDirection: 'row'}}>
-                        <IconButton style={styles.buttonStyle} name="check" onPress={this.props.onAccept} />
-                        <IconButton style={styles.buttonStyle} name="times" onPress={this.props.onDecline} />
+                <TouchableWithoutFeedback>
+                    <View style={styles.containerStyle}>
+                        <Text style={styles.textStyle}>{this.props.text}</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <IconButton style={styles.buttonStyle} name="check" onPress={this.props.onAccept} />
+                            <IconButton style={styles.buttonStyle} name="times" onPress={this.props.onDecline} />
+                        </View>
                     </View>
-                </View>
+                </TouchableWithoutFeedback>
             </TouchableOpacity>
         )
     }
