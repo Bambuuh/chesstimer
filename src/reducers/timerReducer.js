@@ -15,7 +15,7 @@ import {
 
 import getPrettyTimeObj from '../timePrettifier'
 
-const INITIAL_STATE = getDefaultState('Delay')
+const INITIAL_STATE = getDefaultState('Sudden death')
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -50,7 +50,6 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, paused: !state.paused }
 
         case RESET_TIMERS:
-        console.log(INITIAL_STATE)
             return { ...INITIAL_STATE }
 
         case CHANGE_TIMER_SETTINGS:

@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, StyleSheet, TouchableOpacity, Dimensions, Vibration } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration } from 'react-native'
 
 import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime } from '../../actions/timerActions'
 
 import Timer from '../Timer'
 import Button from '../Button'
+import IconButton from '../IconButton'
+import Dialog from '../Dialog'
 
 class TimerView extends Component {
 
@@ -13,7 +15,7 @@ class TimerView extends Component {
         super(props)
 
         this.interval
-        this.state = { delay: 0 }
+        this.state = { delay: 0, showDialog: false }
     }
 
     reduceDelay(time) {
@@ -108,25 +110,29 @@ class TimerView extends Component {
     }
 
     renderMenu() {
-        if (this.props.timers.paused) {
-            return (
-                <View style={styles.menuStyle}>
-                    <Button style={styles.menuButtonStyle} onPress={() => this.togglePausePress()}>Resume</Button>
-                    <Button style={styles.menuButtonStyle} onPress={() => this.props.resetTimers()}>Reset</Button>
-                    <Button style={styles.menuButtonStyle} onPress={() => this.goBack()}>Quit</Button>
-                </View>
-            )
-        } else {
-            return (
-                <View style={styles.pauseButtonStyle}>
-                    {
-                        this.props.timers.winner
-                            ? <Button onPress={() => this.goBack()}>Back</Button>
-                            : <Button onPress={() => this.togglePausePress()}>Pause</Button>
-                    }
-                </View>
-            )
+        const pausePlayIcon = this.props.timers.paused ? 'play' : 'pause'
+        return (
+            <View style={styles.menuStyle}>
+                <IconButton name="undo" onPress={() => this.toggleDialog()} />
+                <IconButton name={pausePlayIcon} onPress={() => this.togglePausePress()} />
+                <IconButton name="home" onPress={() => this.goBack()} />
+            </View>
+        )
+    }
+
+    renderDialog() {
+        const resetTimers = () => {
+            this.props.resetTimers()
+            this.toggleDialog()
         }
+        return <Dialog text="Reset?" onAccept={() => resetTimers()} onDecline={() => this.toggleDialog()} />
+    }
+
+    toggleDialog() {
+        if (!this.props.timers.paused) {
+            this.togglePausePress()
+        }
+        this.setState({ showDialog: !this.state.showDialog })
     }
 
     goBack() {
@@ -158,6 +164,7 @@ class TimerView extends Component {
                     {this.renderTimerView('playerTwo', false)}
                 </View>
                 {this.renderMenu()}
+                {this.state.showDialog && this.renderDialog()}
             </View>
         )
     }
@@ -185,15 +192,23 @@ const styles = StyleSheet.create({
     },
     menuStyle: {
         position: 'absolute',
-        top: 0,
-        bottom: 0,
+        flexDirection: 'row',
         left: 0,
         right: 0,
+        top: (Dimensions.get('window').height / 2) - 25,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'space-around'
     },
-    menuButtonStyle: {
-        marginVertical: 20
+    dialogStyle: {
+        position: 'absolute',
+        left: (Dimensions.get('window').width / 2) - 100,
+        top: (Dimensions.get('window').height / 2) - 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        width: 200,
+        height: 200,
+        borderRadius: 4
     }
 })
 

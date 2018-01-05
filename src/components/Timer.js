@@ -78,7 +78,6 @@ class Timer extends Component {
 
     renderTimer() {
         const { timers, playerKey, style } = this.props
-        console.log('rendering')
         return (
             <View style={style}>
                 <View style={{ position: 'relative' }}>
