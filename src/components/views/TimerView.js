@@ -136,6 +136,9 @@ class TimerView extends Component {
     }
 
     goBack() {
+        if (this.interval) {
+            clearInterval(this.interval)
+        }
         this.props.resetTimers()
         this.props.goBack()
     }
