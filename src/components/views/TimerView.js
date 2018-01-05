@@ -18,6 +18,13 @@ class TimerView extends Component {
         this.state = { delay: 0, showReset: false, showBack: false }
     }
 
+    componentWillUnmount() {
+        if (this.interval) {
+            clearInterval(this.interval)
+            this.props.resetTimers()
+        }
+    }
+
     reduceDelay(time) {
         this.setState({ delay: this.state.delay - time })
     }

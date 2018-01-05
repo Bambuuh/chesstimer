@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, StatusBar } from 'react-native';
+import { StyleSheet, View, Text, StatusBar, BackHandler } from 'react-native';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 
@@ -17,6 +17,21 @@ export default class App extends Component {
     super(props)
 
     this.state = { view: 'start' }
+  }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => this.onBackButtonPressed());
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', () => this.onBackButtonPressed());
+  }
+
+  onBackButtonPressed() {
+    if (this.state.view !== 'start') {
+      this.setState({ view: 'start'})
+      return true;
+    }
   }
 
   goToStart() {
