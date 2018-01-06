@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'white',
         width: width,
-        height: 150,
-        padding: 20,
+        height: 200,
+        padding: 40,
         borderRadius: 4,
     }
 })
