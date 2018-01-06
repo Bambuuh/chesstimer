@@ -5,6 +5,7 @@ import { Text, View, StyleSheet } from 'react-native'
 import Button from '../Button'
 import gameModes from '../../reducers/gameModes'
 import { setGameMode } from '../../actions/timerActions'
+import { changeView } from '../../actions/navActions'
 
 import Picker from '../Picker'
 
@@ -17,7 +18,7 @@ class ModeView extends Component {
 
     selectMode() {
         this.props.setGameMode(this.state.selectedMode)
-        this.props.goToStart()
+        this.props.changeView({ view: 'configure' })
     }
 
     getItems() {
@@ -32,7 +33,7 @@ class ModeView extends Component {
                 <Button style={styles.buttonStyle} onPress={() => this.selectMode()}>
                     Select
                 </Button>
-                <Button style={styles.buttonStyle} onPress={() => this.props.goToStart()}>
+                <Button style={styles.buttonStyle} onPress={() => this.props.changeView({ view: 'configure' })}>
                     Cancel
                 </Button>
             </View>
@@ -56,4 +57,4 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ timers }) => ({ currentMode: timers.mode })
 
-export default connect(mapStateToProps, { setGameMode })(ModeView)
+export default connect(mapStateToProps, { setGameMode, changeView })(ModeView)

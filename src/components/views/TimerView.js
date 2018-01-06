@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration, StatusBar } from 'react-native'
 
 import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove } from '../../actions/timerActions'
+import { changeView } from '../../actions/navActions'
 
 import Timer from '../Timer'
 import Button from '../Button'
@@ -179,7 +180,7 @@ class TimerView extends Component {
             clearInterval(this.interval)
         }
         this.props.resetTimers()
-        this.props.goBack()
+        this.props.changeView({ view: 'configure' })
     }
 
     renderTimerView(playerKey, flipped) {
@@ -268,5 +269,6 @@ export default connect(mapStateToProps, {
     resetTimers,
     addTime,
     reduceAddTime,
-    addMove
+    addMove,
+    changeView
 })(TimerView)

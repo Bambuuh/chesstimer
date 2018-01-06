@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 import { setTimers, changeTimerSettings } from '../../../actions/timerActions'
+import { changeView } from '../../../actions/navActions'
 
 import Button from '../../Button'
 import Picker from '../../Picker'
@@ -14,7 +15,7 @@ import DelaySettings from './delaySettings'
 class StartView extends Component {
     start() {
         this.props.setTimers()
-        this.props.goToTimer()
+        this.props.changeView({ view: 'timers' })
     }
 
     renderStandardSettings() {
@@ -63,7 +64,7 @@ class StartView extends Component {
             <View style={styles.container}>
                 <Text style={styles.modeStyle}>{this.props.timers.mode}</Text>
                 {this.renderSettings()}
-                <Button style={styles.buttonStyles} onPress={() => this.props.goToModeView()}>
+                <Button style={styles.buttonStyles} onPress={() => this.props.changeView({ view: 'modes' })}>
                     Change mode
                 </Button>
                 <Button style={styles.buttonStyles} onPress={() => this.start()}>
@@ -92,4 +93,4 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ timers }) => ({ timers })
 
-export default connect(mapStateToProps, { setTimers, changeTimerSettings })(StartView)
+export default connect(mapStateToProps, { setTimers, changeTimerSettings, changeView })(StartView)

@@ -8,3 +8,5 @@ export const CHANGE_TIMER_SETTINGS = 'change_settings'
 export const ADD_TIME = 'add_time'
 export const REDUCE_ADD_TIME = 'reduce_add_time'
 export const ADD_MOVE = 'add_move'
+
+export const CHANGE_VIEW = 'change_view'
