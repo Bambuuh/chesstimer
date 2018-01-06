@@ -245,7 +245,8 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        paddingHorizontal: 40
     },
     dialogStyle: {
         position: 'absolute',

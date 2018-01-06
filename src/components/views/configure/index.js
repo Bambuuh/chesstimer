@@ -64,11 +64,11 @@ class StartView extends Component {
             <View style={styles.container}>
                 <Text style={styles.modeStyle}>{this.props.timers.mode}</Text>
                 {this.renderSettings()}
-                <Button style={styles.buttonStyles} onPress={() => this.props.changeView({ view: 'modes' })}>
-                    Change mode
-                </Button>
                 <Button style={styles.buttonStyles} onPress={() => this.start()}>
                     Start
+                </Button>
+                <Button style={styles.buttonStyles} onPress={() => this.props.changeView({ view: 'modes' })}>
+                    Change mode
                 </Button>
             </View>
         )

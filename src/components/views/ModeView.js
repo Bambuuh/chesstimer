@@ -31,10 +31,7 @@ class ModeView extends Component {
                 <Text style={styles.headerStyle}>Choose game mode</Text>
                 <Picker selected={this.state.selectedMode} items={this.getItems()} onChange={(value) => this.setState({ selectedMode: value })} />
                 <Button style={styles.buttonStyle} onPress={() => this.selectMode()}>
-                    Select
-                </Button>
-                <Button style={styles.buttonStyle} onPress={() => this.props.changeView({ view: 'configure' })}>
-                    Cancel
+                    Continue
                 </Button>
             </View>
         )
