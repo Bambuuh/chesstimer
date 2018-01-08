@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Text, View, StyleSheet } from 'react-native'
 
 import Button from '../Button'
-import gameModes from '../../reducers/gameModes'
 import { setGameMode } from '../../actions/timerActions'
 import { changeView } from '../../actions/navActions'
 
@@ -22,7 +21,7 @@ class ModeView extends Component {
     }
 
     getItems() {
-        return ['Sudden death', 'Hourglass', 'Overtime', 'Increment', 'Delay'].map(mode => ({ label: mode, value: mode }))
+        return ['Sudden death', 'Fixed', 'Hourglass', 'Overtime', 'Increment', 'Delay'].map(mode => ({ label: mode, value: mode }))
     }
 
     render() {

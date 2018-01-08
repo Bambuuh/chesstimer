@@ -53,6 +53,7 @@ class StartView extends Component {
                 return this.renderIncrementSettings()
             case 'Delay':
                 return this.renderDelaySettings()
+            case 'Fixed':
             case 'Hourglass':
             default:
                 return this.renderStandardSettings()

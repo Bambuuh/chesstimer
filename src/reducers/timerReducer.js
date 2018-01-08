@@ -160,6 +160,9 @@ function getDefaultSettings(mode) {
     switch (mode) {
         case 'Sudden death':
             return settings
+        case 'Fixed':
+            settings.baseTime.minutes = '01'
+            return settings
         case 'Hourglass':
             settings.baseTime.minutes = '01'
             return settings

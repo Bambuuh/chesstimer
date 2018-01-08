@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration, StatusBar } from 'react-native'
 
-import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove } from '../../actions/timerActions'
+import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove, setTimers } from '../../actions/timerActions'
 import { changeView } from '../../actions/navActions'
 
 import Timer from '../Timer'
@@ -41,6 +41,11 @@ class TimerView extends Component {
         if (timers.mode === 'Increment') {
             this.props.addTime(playerKey)
         }
+
+        if (timers.mode === 'Fixed') {
+            this.props.setTimers()
+        }
+
         this.props.setActivePlayer(otherPlayer)
 
         if (timers.addTime > 0 && timers[playerKey].moves + 1 === timers.settings.moveThreshold) {
@@ -191,7 +196,7 @@ class TimerView extends Component {
                 disabled={this.isDisabled(playerKey)}
                 onPress={() => this.onPress(playerKey)}
             >
-                <View style={[{ width: '100%', height: '100%', padding: 40 }, this.getTimerStyle(playerKey)]}>
+                <View style={[{ width: '100%', height: '100%', padding: 20 }, this.getTimerStyle(playerKey)]}>
                     <Timer delay={this.state.delay} style={rotation} playerKey={playerKey} />
                 </View>
             </TouchableOpacity>
@@ -269,6 +274,7 @@ export default connect(mapStateToProps, {
     togglePaused,
     resetTimers,
     addTime,
+    setTimers,
     reduceAddTime,
     addMove,
     changeView
