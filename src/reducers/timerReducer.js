@@ -45,13 +45,23 @@ export default (state = INITIAL_STATE, action) => {
             }
 
         case ADD_MOVE:
-            return { ...state, [action.payload]: { ...state[action.payload], moves: state[action.payload].moves + 1} }
+            return { ...state, [action.payload]: { ...state[action.payload], moves: state[action.payload].moves + 1 } }
 
         case TOGGLE_PAUSED:
             return { ...state, paused: !state.paused }
 
         case RESET_TIMERS:
-            return { ...INITIAL_STATE }
+            return {
+                ...INITIAL_STATE,
+                playerOne: {
+                    ...INITIAL_STATE.playerOne,
+                    moves: action.payload ? state.playerOne.moves : INITIAL_STATE.playerOne.moves
+                },
+                playerTwo: {
+                    ...INITIAL_STATE.playerTwo,
+                    moves: action.payload ? state.playerTwo.moves : INITIAL_STATE.playerTwo.moves 
+                }
+            }
 
         case CHANGE_TIMER_SETTINGS:
             settings = { ...action.payload }

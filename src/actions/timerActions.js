@@ -25,8 +25,9 @@ export const togglePaused = () => ({
     type: TOGGLE_PAUSED,
 })
 
-export const resetTimers = () => ({
-    type: RESET_TIMERS
+export const resetTimers = (keepMoves) => ({
+    type: RESET_TIMERS,
+    payload: keepMoves
 })
 
 export const setTimers = () => ({

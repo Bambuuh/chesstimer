@@ -30,30 +30,73 @@ class TimerView extends Component {
         this.setState({ delay: this.state.delay - time })
     }
 
-    startTimer(playerKey) {
-        const { timers } = this.props
-        this.setState({ delay: this.props.timers.addTime })
+    regularTimer(playerKey) {
         if (this.interval) {
             clearInterval(this.interval)
         }
         const otherPlayer = this.getOtherPlayer(playerKey)
+        this.props.setActivePlayer(otherPlayer)
+        this.startLoop(otherPlayer)
+    }
 
-        if (timers.mode === 'Increment') {
+    fixedTimer(playerKey, wasPaused) {
+        if (this.interval) {
+            clearInterval(this.interval)
+        }
+        if (!wasPaused) {
+            this.props.resetTimers(true)
+        }
+        const otherPlayer = this.getOtherPlayer(playerKey)
+        this.props.setActivePlayer(otherPlayer)
+        this.startLoop(otherPlayer)
+    }
+
+    incrementTimer(playerKey, wasPaused) {
+        if (this.interval) {
+            clearInterval(this.interval)
+        }
+        const otherPlayer = this.getOtherPlayer(playerKey)
+        if (!wasPaused) {
             this.props.addTime(playerKey)
         }
-
-        if (timers.mode === 'Fixed') {
-            this.props.setTimers()
-        }
-
         this.props.setActivePlayer(otherPlayer)
+        this.startLoop(otherPlayer)
+    }
 
+    overtimerLoop(playerKey) {
+        const { timers } = this.props
+        if (this.interval) {
+            clearInterval(this.interval)
+        }
+        const otherPlayer = this.getOtherPlayer(playerKey)
+        this.props.setActivePlayer(otherPlayer)
         if (timers.addTime > 0 && timers[playerKey].moves + 1 === timers.settings.moveThreshold) {
             this.props.addTime(playerKey)
         }
+        this.startLoop(otherPlayer)
+    }
 
+    delayLoop(playerKey, wasPaused) {
+        if (!wasPaused) {
+            this.setState({ delay: this.props.timers.addTime })
+        }
+        if (this.interval) {
+            clearInterval(this.interval)
+        }
+        const otherPlayer = this.getOtherPlayer(playerKey)
+        this.props.setActivePlayer(otherPlayer)
+        const updateFn = (delta) => {
+            if (this.state.delay > 0) {
+                this.reduceDelay(delta)
+            } else {
+                this.props.updateTimer(otherPlayer, delta)
+            }
+        }
+        this.startLoop(otherPlayer, updateFn)
+    }
+
+    startLoop (otherPlayer, updateFn) {
         let lastUpdate = Date.now()
-
         this.interval = setInterval(() => {
             if (this.props.timers.winner) {
                 clearInterval(this.interval)
@@ -61,17 +104,32 @@ class TimerView extends Component {
                 const now = Date.now()
                 const delta = (now - lastUpdate)
                 lastUpdate = now
-                if (timers.mode === 'Delay') {
-                    if (this.state.delay > 0) {
-                        this.reduceDelay(delta)
-                    } else {
-                        this.props.updateTimer(otherPlayer, delta)
-                    }
+                if(updateFn){
+                    updateFn(delta)
                 } else {
                     this.props.updateTimer(otherPlayer, delta)
                 }
             }
         }, 50)
+    }
+
+    startTimer(playerKey, wasPaused) {
+        switch (this.props.timers.mode) {
+            case 'Overtime':
+                this.overtimerLoop(playerKey)
+                break
+            case 'Fixed':
+                this.fixedTimer(playerKey, wasPaused)
+                break
+            case 'Delay':
+                this.delayLoop(playerKey, wasPaused)
+                break
+            case 'Increment':
+                this.incrementTimer(playerKey, wasPaused)
+                break
+            default:
+                this.regularTimer(playerKey)
+        }
     }
 
     getOtherPlayer(playerKey) {
@@ -83,20 +141,23 @@ class TimerView extends Component {
             this.props.addMove(playerKey)
             this.startTimer(playerKey)
             Vibration.vibrate(100)
-
         }
     }
 
     togglePausePress() {
-        if (this.props.timers.winner || !this.props.timers.activePlayer) {
+        const { timers } = this.props
+        if (timers.winner || !timers.activePlayer) {
             return;
         }
-        this.props.togglePaused()
-        if (this.props.timers.paused) {
-            if (this.props.timers.activePlayer) {
 
-                const otherPlayer = this.getOtherPlayer(this.props.timers.activePlayer)
-                this.startTimer(otherPlayer)
+        const wasPaused = timers.paused
+
+        this.props.togglePaused()
+        if (timers.paused) {
+            if (timers.activePlayer) {
+
+                const otherPlayer = this.getOtherPlayer(timers.activePlayer)
+                this.startTimer(otherPlayer, wasPaused)
             }
         } else {
             if (this.interval) {
