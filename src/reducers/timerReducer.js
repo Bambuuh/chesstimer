@@ -23,7 +23,6 @@ export default (state = INITIAL_STATE, action) => {
             state = { ...state }
             updateTimers(state, action.payload)
             if (state[action.payload.playerKey].time <= 0) {
-                Vibration.vibrate(500)
                 state.winner = getOtherPlayerKey(action.payload.playerKey)
             }
 

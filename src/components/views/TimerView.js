@@ -5,6 +5,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration, Status
 import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove, setTimers } from '../../actions/timerActions'
 import { changeView } from '../../actions/navActions'
 
+import { click, timesUp } from '../../sounds'
+
 import Timer from '../Timer'
 import Button from '../Button'
 import IconButton from '../IconButton'
@@ -95,7 +97,7 @@ class TimerView extends Component {
         this.startLoop(otherPlayer, updateFn)
     }
 
-    startLoop (otherPlayer, updateFn) {
+    startLoop(otherPlayer, updateFn) {
         let lastUpdate = Date.now()
         this.interval = setInterval(() => {
             if (this.props.timers.winner) {
@@ -104,10 +106,18 @@ class TimerView extends Component {
                 const now = Date.now()
                 const delta = (now - lastUpdate)
                 lastUpdate = now
-                if(updateFn){
+                if (updateFn) {
                     updateFn(delta)
                 } else {
                     this.props.updateTimer(otherPlayer, delta)
+                    if (this.props.timers[otherPlayer].time <= 0) {
+                        if (this.props.settings.vibrations) {
+                            Vibration.vibrate(500)
+                        }
+                        if (this.props.settings.sounds) {
+                            timesUp.play()
+                        }
+                    }
                 }
             }
         }, 50)
@@ -138,9 +148,14 @@ class TimerView extends Component {
 
     onPress(playerKey) {
         if (this.isActive(playerKey)) {
+            if (this.props.settings.sounds) {
+                click.stop(() => click.play());
+            }
+            if (this.props.settings.vibrations) {
+                Vibration.vibrate(100)
+            }
             this.props.addMove(playerKey)
             this.startTimer(playerKey)
-            Vibration.vibrate(100)
         }
     }
 
@@ -327,7 +342,7 @@ const styles = StyleSheet.create({
     }
 })
 
-mapStateToProps = ({ timers }) => ({ timers })
+mapStateToProps = ({ timers, settings }) => ({ timers, settings })
 
 export default connect(mapStateToProps, {
     updateTimer,

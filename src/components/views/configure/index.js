@@ -71,6 +71,9 @@ class StartView extends Component {
                 <Button style={styles.buttonStyles} onPress={() => this.props.changeView({ view: 'modes' })}>
                     Change mode
                 </Button>
+                <Button style={styles.buttonStyles} onPress={() => this.props.changeView({ view: 'settings' })}>
+                    Settings
+                </Button>
             </View>
         )
     }

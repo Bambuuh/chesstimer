@@ -10,3 +10,5 @@ export const REDUCE_ADD_TIME = 'reduce_add_time'
 export const ADD_MOVE = 'add_move'
 
 export const CHANGE_VIEW = 'change_view'
+
+export const UPDATE_SETTINGS = 'update_settings'

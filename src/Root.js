@@ -3,15 +3,18 @@ import { BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 
 import { changeView } from './actions/navActions'
+import { getSettings } from './actions/settingsActions'
 
 import Configure from './components/views/configure'
 import ModeView from './components/views/ModeView'
 import TimerView from './components/views/TimerView'
+import Settings from './components/views/Settings'
 
 class Root extends Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', () => this.onBackButtonPressed());
+        this.props.getSettings();
     }
 
     componentWillUnmount() {
@@ -34,6 +37,8 @@ class Root extends Component {
                 return <ModeView />
             case 'timers':
                 return <TimerView style={{ flex: 1 }} />
+            case 'settings':
+                return <Settings style={{ flex: 1}} />
             default:
                 return <Configure style={{ flex: 1 }} />
         }
@@ -42,4 +47,4 @@ class Root extends Component {
 
 const mapStateToProps = ({ nav }) => ({ nav })
 
-export default connect(mapStateToProps, { changeView })(Root)
+export default connect(mapStateToProps, { changeView, getSettings })(Root)
