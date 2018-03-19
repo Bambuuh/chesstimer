@@ -9,6 +9,7 @@
   "dependencies": {
     "react": "16.0.0",
     "react-native": "0.51.0",
+    "react-native-keep-awake": "^3.0.1",
     "react-native-sound": "^0.10.9",
     "react-native-vector-icons": "^4.5.0",
     "react-native-wheel-picker": "^1.2.0",

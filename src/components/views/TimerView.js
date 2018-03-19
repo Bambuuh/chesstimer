@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration, StatusBar } from 'react-native'
+import KeepAwake from 'react-native-keep-awake'
 
 import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove, setTimers } from '../../actions/timerActions'
 import { changeView } from '../../actions/navActions'
@@ -21,7 +22,12 @@ class TimerView extends Component {
         this.state = { delay: 0, showReset: false, showBack: false }
     }
 
+    componentDidMount() {
+        KeepAwake.activate()
+    }
+
     componentWillUnmount() {
+        KeepAwake.deactivate()
         if (this.interval) {
             clearInterval(this.interval)
             this.props.resetTimers()
