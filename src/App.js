@@ -7,28 +7,22 @@ import thunk from 'redux-thunk'
 import reducers from './reducers'
 
 import Root from './Root'
+import Navigation from './navigation'
 
 const store = createStore(reducers, applyMiddleware(thunk))
 
 export default class App extends Component {
   render() {
+    StatusBar.setHidden(true);
     return (
-      <Provider style={{ flex: 1 }} store={store}>
-        <View style={styles.container}>
-          <StatusBar
-            hidden
-          />
-          <Root />
-        </View>
+      <Provider style={styles.container} store={store}>
+          <Navigation />
       </Provider>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  viewStyles: {
-    flex: 1
-  },
   container: {
     flex: 1,
     justifyContent: 'center',

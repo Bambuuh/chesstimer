@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Text, TouchableOpacity, StyleSheet } from 'react-native'
 
+import theme from '../styles/theme'
+
 export default class Button extends Component {
     render() {
         return (
@@ -15,16 +17,16 @@ export default class Button extends Component {
 
 const styles = StyleSheet.create({
     buttonStyles: {
-        backgroundColor: '#f39c12',
-        width: 200,
-        height: 50,
+        backgroundColor: theme.buttonColor,
+        width: (theme.baseline * 20),
+        height: (theme.baseline * 5),
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 4
     },
     textStyles: {
-        color: 'white',
-        fontSize: 24,
+        color: theme.buttonTextColor,
+        fontSize: 20,
         fontWeight: 'bold'
     }
 })

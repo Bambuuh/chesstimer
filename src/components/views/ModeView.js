@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Text, View, StyleSheet } from 'react-native'
 
+import theme from '../../styles/theme'
+
 import Button from '../Button'
 import { setGameMode } from '../../actions/timerActions'
-import { changeView } from '../../actions/navActions'
 
 import Picker from '../Picker'
+import Header from '../Header'
 
 class ModeView extends Component {
 
@@ -17,7 +19,7 @@ class ModeView extends Component {
 
     selectMode() {
         this.props.setGameMode(this.state.selectedMode)
-        this.props.changeView({ view: 'configure' })
+        this.props.navigation.navigate('Configure')
     }
 
     getItems() {
@@ -27,8 +29,11 @@ class ModeView extends Component {
     render() {
         return (
             <View style={styles.containerStyle}>
-                <Text style={styles.headerStyle}>Choose game mode</Text>
-                <Picker selected={this.state.selectedMode} items={this.getItems()} onChange={(value) => this.setState({ selectedMode: value })} />
+                <Picker
+                    width={200}
+                    selected={this.state.selectedMode}
+                    items={this.getItems()} onChange={(value) => this.setState({ selectedMode: value })}
+                />
                 <Button style={styles.buttonStyle} onPress={() => this.selectMode()}>
                     Continue
                 </Button>
@@ -39,18 +44,15 @@ class ModeView extends Component {
 
 const styles = StyleSheet.create({
     containerStyle: {
-        alignItems: 'center'
-    },
-    headerStyle: {
-        fontSize: 30,
-        marginBottom: 20,
-        color: '#f39c12'
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     buttonStyle: {
-        marginTop: 20
+        marginTop: (theme.baseline * 2)
     }
 })
 
 const mapStateToProps = ({ timers }) => ({ currentMode: timers.mode })
 
-export default connect(mapStateToProps, { setGameMode, changeView })(ModeView)
+export default connect(mapStateToProps, { setGameMode })(ModeView)

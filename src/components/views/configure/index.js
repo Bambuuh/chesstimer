@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
-import { setTimers, changeTimerSettings } from '../../../actions/timerActions'
-import { changeView } from '../../../actions/navActions'
+import theme from '../../../styles/theme'
 
+import { setTimers, changeTimerSettings } from '../../../actions/timerActions'
+
+import Header from '../../Header'
 import Button from '../../Button'
 import Picker from '../../Picker'
 
@@ -13,9 +15,10 @@ import IncrementSettings from './incrementSettings'
 import DelaySettings from './delaySettings'
 
 class StartView extends Component {
+
     start() {
         this.props.setTimers()
-        this.props.changeView({ view: 'timers' })
+        this.props.navigation.navigate('Timers')
     }
 
     renderStandardSettings() {
@@ -23,18 +26,18 @@ class StartView extends Component {
     }
 
     renderOvertimeSettings() {
-        return <OvertimeSettings settings={this.props.timers.settings} updateValue={(stateKey, value, key) => this.updateSettings(stateKey, value, key)}/>
+        return <OvertimeSettings settings={this.props.timers.settings} updateValue={(stateKey, value, key) => this.updateSettings(stateKey, value, key)} />
     }
 
     renderIncrementSettings() {
-        return <IncrementSettings settings={this.props.timers.settings} updateValue={(stateKey, value, key) => this.updateSettings(stateKey, value, key)}/>
+        return <IncrementSettings settings={this.props.timers.settings} updateValue={(stateKey, value, key) => this.updateSettings(stateKey, value, key)} />
     }
 
     renderDelaySettings() {
-        return <DelaySettings settings={this.props.timers.settings} updateValue={(stateKey, value, key) => this.updateSettings(stateKey, value, key)}/>
+        return <DelaySettings settings={this.props.timers.settings} updateValue={(stateKey, value, key) => this.updateSettings(stateKey, value, key)} />
     }
 
-    updateSettings(stateKey, value, key ) {
+    updateSettings(stateKey, value, key) {
         const { settings } = this.props.timers
 
         if (key) {
@@ -68,10 +71,7 @@ class StartView extends Component {
                 <Button style={styles.buttonStyles} onPress={() => this.start()}>
                     Start
                 </Button>
-                <Button style={styles.buttonStyles} onPress={() => this.props.changeView({ view: 'modes' })}>
-                    Change mode
-                </Button>
-                <Button style={styles.buttonStyles} onPress={() => this.props.changeView({ view: 'settings' })}>
+                <Button style={styles.buttonStyles} onPress={() => this.props.navigation.navigate('Settings')}>
                     Settings
                 </Button>
             </View>
@@ -86,15 +86,15 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     buttonStyles: {
-        marginTop: 20
+        marginTop: (theme.baseline * 2)
     },
     modeStyle: {
         fontSize: 30,
-        marginBottom: 20,
-        color: '#f39c12'
+        marginBottom: (theme.baseline * 2),
+        color: theme.textColor,
     },
 })
 
 const mapStateToProps = ({ timers }) => ({ timers })
 
-export default connect(mapStateToProps, { setTimers, changeTimerSettings, changeView })(StartView)
+export default connect(mapStateToProps, { setTimers, changeTimerSettings })(StartView)

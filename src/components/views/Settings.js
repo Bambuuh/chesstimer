@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 
-import { changeView } from '../../actions/navActions'
 import { saveSettings } from '../../actions/settingsActions'
 
 import Button from '../Button'
@@ -32,9 +31,6 @@ class Settings extends Component {
                     {this.renderSetting({name: 'vibrations', value: this.props.settings.vibrations})}
                     {this.renderSetting({name: 'sounds', value: this.props.settings.sounds})}
                 </View>
-                <Button onPress={() => this.props.changeView('configure')}>
-                    Back
-                </Button>
             </View>
         )
     }
@@ -51,4 +47,4 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ settings }) => ({ settings })
 
-export default connect(mapStateToProps, { changeView, saveSettings })(Settings)
+export default connect(mapStateToProps, { saveSettings })(Settings)

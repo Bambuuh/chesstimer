@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 
-import { changeView } from './actions/navActions'
 import { getSettings } from './actions/settingsActions'
 
 import Configure from './components/views/configure'
@@ -21,16 +20,6 @@ class Root extends Component {
         BackHandler.removeEventListener('hardwareBackPress', () => this.onBackButtonPressed());
     }
 
-    onBackButtonPressed() {
-        if (this.props.nav.view === 'timers') {
-            this.props.changeView({ view: 'configure' })
-            return true
-        } else if (this.props.nav.view === 'configure') {
-            this.props.changeView({ view: 'modes' })
-            return true
-        }
-    }
-
     render() {
         switch (this.props.nav.view) {
             case 'modes':
@@ -47,4 +36,4 @@ class Root extends Component {
 
 const mapStateToProps = ({ nav }) => ({ nav })
 
-export default connect(mapStateToProps, { changeView, getSettings })(Root)
+export default connect(mapStateToProps, { getSettings })(Root)

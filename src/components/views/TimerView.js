@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration, Status
 import KeepAwake from 'react-native-keep-awake'
 
 import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove, setTimers } from '../../actions/timerActions'
-import { changeView } from '../../actions/navActions'
 
 import { click, timesUp } from '../../sounds'
 
@@ -14,6 +13,11 @@ import IconButton from '../IconButton'
 import Dialog from '../Dialog'
 
 class TimerView extends Component {
+
+    static navigationOptions = {
+        header: null,
+        title: 'Welcome',
+    };
 
     constructor(props) {
         super(props)
@@ -267,7 +271,7 @@ class TimerView extends Component {
             clearInterval(this.interval)
         }
         this.props.resetTimers()
-        this.props.changeView({ view: 'configure' })
+        this.props.navigation.pop()
     }
 
     renderTimerView(playerKey, flipped) {
@@ -359,5 +363,4 @@ export default connect(mapStateToProps, {
     setTimers,
     reduceAddTime,
     addMove,
-    changeView
 })(TimerView)
