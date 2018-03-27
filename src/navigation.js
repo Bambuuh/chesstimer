@@ -1,6 +1,6 @@
 import React from 'react'
 import { StackNavigator } from 'react-navigation'
-import { StatusBar, Platform } from 'react-native'
+import { View, StatusBar, Platform, Dimensions } from 'react-native'
 
 import theme from './styles/theme'
 
@@ -36,10 +36,11 @@ const routeConfiguration = {
     }
 }
 
+const width = Dimensions.get('window').width
+
 const StackConfiguration = {
     cardStyle: {
         backgroundColor: theme.backgroundColor,
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -47,18 +48,21 @@ const StackConfiguration = {
         headerTintColor: 'white',
         headerBackTitle: null,
         headerStyle: {
+            width: width,
             backgroundColor: theme.nuanceColor,
             borderColor: theme.nuanceColor,
-            height: 40,
-            padding: 15,
+            height: 50,
             borderBottomWidth: 0,
         },
         headerTitleStyle: {
+            textAlign: 'center',
+            alignSelf:'center',
+            flex: 1,
             color: theme.textColor,
             fontWeight: 'bold',
             fontSize: 26,
-            alignSelf: 'center'
         },
+        headerRight: (<View />)
     })
 }
 

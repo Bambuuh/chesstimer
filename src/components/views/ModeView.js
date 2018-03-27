@@ -12,6 +12,10 @@ import Header from '../Header'
 
 class ModeView extends Component {
 
+    static navigationOptions = {
+        headerLeft: (<View />)
+    };
+
     constructor(props) {
         super(props)
         this.state = { selectedMode: this.props.currentMode }
