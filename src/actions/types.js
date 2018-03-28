@@ -12,3 +12,5 @@ export const ADD_MOVE = 'add_move'
 export const CHANGE_VIEW = 'change_view'
 
 export const UPDATE_SETTINGS = 'update_settings'
+export const RESET_WARNINGS = 'reset_warnings'
+export const TRIGGER_WARNING = 'trigger_warning'

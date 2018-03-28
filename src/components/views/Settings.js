@@ -25,35 +25,37 @@ class Settings extends Component {
         }
     }
 
-    renderSetting({ name, value }) {
+    renderSetting({ name, key, value }) {
         return (
             <CheckBox
                 style={styles.checkBox}
-                onPress={() => this.updateSetting(name, value)}
+                onPress={() => this.updateSetting(key, value)}
                 checked={value}
                 label={name}
             />
         )
     }
 
-    updateSetting(name, value) {
-        this.props.saveSettings({ ...this.props.settings, [name]: !value })
+    updateSetting(key, value) {
+        this.props.saveSettings({ ...this.props.settings, [key]: !value })
     }
 
-    warningExists() {
-        const { hours, minutes, seconds } = this.state.time
-        return this.props.settings.warnings.some(warning => warning.hours === hours && warning.minutes === minutes && warning.seconds === seconds)
+    getWarningList() {
+        const { warnings } = this.props.settings
+        return Object.keys(warnings)
+            .map(key => warnings[key])
+            .sort((a, b) => this.sortByTime(a, b))
     }
 
     addWarning() {
-        if (this.warningExists()) {
+        const { seconds, minutes, hours } = this.state.time
+        const key = `${hours}${minutes}${seconds}`
+        if (this.props.settings.warnings[key]) {
             return
         }
 
-        const newWarnings = [...this.props.settings.warnings]
-        newWarnings.push(this.state.time)
-
-        newWarnings.sort((a, b) => this.sortByTime(a, b))
+        const newWarnings = { ...this.props.settings.warnings }
+        newWarnings[key] = this.state.time
         this.props.saveSettings({ ...this.props.settings, warnings: newWarnings })
     }
 
@@ -67,8 +69,12 @@ class Settings extends Component {
             }
         }
 
-        const newWarnings = [...this.props.settings.warnings]
-        newWarnings.splice(this.state.selectedWarning, 1)
+        const { hours, minutes, seconds } = this.getWarningList()[this.state.selectedWarning]
+        const key = `${hours}${minutes}${seconds}`
+
+        const newWarnings =  { ...this.props.settings.warnings }
+        delete newWarnings[key]
+        console.log(newWarnings)
         this.props.saveSettings({ ...this.props.settings, warnings: newWarnings })
         this.setState({ selectedWarning: nextIndex })
     }
@@ -96,7 +102,7 @@ class Settings extends Component {
     }
 
     renderAddedWarnings() {
-        if (this.props.settings.warnings.length === 0) {
+        if (Object.keys(this.props.settings.warnings).length === 0) {
             return false
         }
         const marginTop = Platform.OS === 'ios' ? -25 : 0
@@ -111,7 +117,7 @@ class Settings extends Component {
                         selectedValue={this.state.selectedWarning}
                         onValueChange={(index) => this.setState({ selectedWarning: index })}
                     >
-                        {this.props.settings.warnings.map((time, i) => {
+                        {this.getWarningList().map((time, i) => {
                             const value = `${time.hours} : ${time.minutes} : ${time.seconds}`
                             return <NativePicker.Item key={value} label={value} value={i} />
                         })}
@@ -129,9 +135,9 @@ class Settings extends Component {
         return (
             <ScrollView fillViewPort contentContainerStyle={styles.settingsContainer} style={{ flex: 1, width: "100%" }}>
                 <View style={styles.checkBoxContainer}>
-                    {this.renderSetting({ name: 'Vibrations', value: this.props.settings.vibrations })}
-                    {this.renderSetting({ name: 'Tap sounds', value: this.props.settings.tapSounds })}
-                    {this.renderSetting({ name: 'Warning sounds', value: this.props.settings.warningSounds })}
+                    {this.renderSetting({ name: 'Vibrations', key: 'vibrations', value: this.props.settings.vibrations })}
+                    {this.renderSetting({ name: 'Tap sounds', key: 'tapSounds', value: this.props.settings.tapSounds })}
+                    {this.renderSetting({ name: 'Warning sounds', key: 'warningSounds', value: this.props.settings.warningSounds })}
                 </View>
                 <View style={styles.warningSetting}>
                     <Text style={styles.textStyle}>Add warning</Text>

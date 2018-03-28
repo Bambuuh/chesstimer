@@ -1,4 +1,4 @@
-import { UPDATE_SETTINGS } from './types'
+import { UPDATE_SETTINGS, RESET_WARNINGS, TRIGGER_WARNING } from './types'
 import { save, get } from '../storage'
 
 export const saveSettings = (newSettings) => {
@@ -15,6 +15,7 @@ export const getSettings = () => {
     return dispatch => {
         get().then(settings => {
             if (settings !== null) {
+                Object.keys(settings.warnings).forEach(key => settings.warnings[key].triggered = false)
                 dispatch({
                     type: UPDATE_SETTINGS,
                     payload: settings
@@ -23,3 +24,10 @@ export const getSettings = () => {
         })
     }
 }
+
+export const resetWarnings = () => ({ type: RESET_WARNINGS })
+
+export const triggerWarning = (key) => ({
+    type: TRIGGER_WARNING,
+    payload: key
+})

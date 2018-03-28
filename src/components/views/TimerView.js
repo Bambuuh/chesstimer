@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Vibration, Status
 import KeepAwake from 'react-native-keep-awake'
 
 import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove, setTimers } from '../../actions/timerActions'
+import { resetWarnings, triggerWarning } from '../../actions/settingsActions'
 
 import { click, timesUp } from '../../sounds'
 
@@ -11,6 +12,7 @@ import Timer from '../Timer'
 import Button from '../Button'
 import IconButton from '../IconButton'
 import Dialog from '../Dialog'
+import timePrettifier from '../../timePrettifier';
 
 class TimerView extends Component {
 
@@ -108,6 +110,7 @@ class TimerView extends Component {
     }
 
     startLoop(otherPlayer, updateFn) {
+        this.props.resetWarnings()
         let lastUpdate = Date.now()
         this.interval = setInterval(() => {
             if (this.props.timers.winner) {
@@ -128,7 +131,16 @@ class TimerView extends Component {
                             timesUp.play()
                         }
                     }
-                    console.log(this.props.timers[otherPlayer].time)
+                    if (this.props.settings.warningSounds) {
+                        const pretty = timePrettifier(this.props.timers[otherPlayer].time)
+                        const { seconds, minutes, hours } = pretty
+                        const key = `${hours}${minutes}${seconds}`
+                        const warning = this.props.settings.warnings[key]
+                        if (warning && !warning.triggered) {
+                            console.log('sound!')
+                            this.props.triggerWarning(key)
+                        }
+                    }
                 }
             }
         }, 50)
@@ -364,4 +376,6 @@ export default connect(mapStateToProps, {
     setTimers,
     reduceAddTime,
     addMove,
+    triggerWarning,
+    resetWarnings
 })(TimerView)
