@@ -40,12 +40,37 @@ class Settings extends Component {
         this.props.saveSettings({ ...this.props.settings, [name]: !value })
     }
 
+    warningExists() {
+        const { hours, minutes, seconds } = this.state.time
+        return this.props.settings.warnings.some(warning => warning.hours === hours && warning.minutes === minutes && warning.seconds === seconds)
+    }
+
     addWarning() {
-        const newWarnings = [ ...this.props.settings.warnings ]
+        if (this.warningExists()) {
+            return
+        }
+
+        const newWarnings = [...this.props.settings.warnings]
         newWarnings.push(this.state.time)
 
         newWarnings.sort((a, b) => this.sortByTime(a, b))
         this.props.saveSettings({ ...this.props.settings, warnings: newWarnings })
+    }
+
+    removeWarning() {
+        let nextIndex = this.state.selectedWarning
+
+        if (nextIndex === this.props.settings.warnings.length - 1) {
+            nextIndex--;
+            if (nextIndex < 0) {
+                nextIndex = 0
+            }
+        }
+
+        const newWarnings = [...this.props.settings.warnings]
+        newWarnings.splice(this.state.selectedWarning, 1)
+        this.props.saveSettings({ ...this.props.settings, warnings: newWarnings })
+        this.setState({ selectedWarning: nextIndex })
     }
 
     sortByTime(timeA, timeB) {
@@ -83,7 +108,7 @@ class Settings extends Component {
                         textColor={'black'}
                         style={{ marginTop, width: 160, height: 200 }}
                         itemStyle={{ color: '#f39c12', fontSize: 20 }}
-                        selectedValue={this.props.settings.warnings[this.state.selectedWarning]}
+                        selectedValue={this.state.selectedWarning}
                         onValueChange={(index) => this.setState({ selectedWarning: index })}
                     >
                         {this.props.settings.warnings.map((time, i) => {
@@ -92,9 +117,9 @@ class Settings extends Component {
                         })}
                     </NativePicker>
                 </View>
-                <Button style={styles.buttonStyle} onPress={() => this.addWarning()}>
+                <Button style={styles.buttonStyle} onPress={() => this.removeWarning()}>
                     Remove
-                    </Button>
+                </Button>
             </View>
         )
     }
@@ -104,8 +129,9 @@ class Settings extends Component {
         return (
             <ScrollView fillViewPort contentContainerStyle={styles.settingsContainer} style={{ flex: 1, width: "100%" }}>
                 <View style={styles.checkBoxContainer}>
-                    {this.renderSetting({ name: 'vibrations', value: this.props.settings.vibrations })}
-                    {this.renderSetting({ name: 'sounds', value: this.props.settings.sounds })}
+                    {this.renderSetting({ name: 'Vibrations', value: this.props.settings.vibrations })}
+                    {this.renderSetting({ name: 'Tap sounds', value: this.props.settings.tapSounds })}
+                    {this.renderSetting({ name: 'Warning sounds', value: this.props.settings.warningSounds })}
                 </View>
                 <View style={styles.warningSetting}>
                     <Text style={styles.textStyle}>Add warning</Text>

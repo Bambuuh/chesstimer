@@ -9,7 +9,6 @@ import theme from '../styles/theme'
 class Header extends Component {
 
     getBackButtonOpacity() {
-        console.log(this.props.navigation.index > 0 ? 1 : 0)
         return this.props.navigation.index > 0 ? 1 : 0
     }
 

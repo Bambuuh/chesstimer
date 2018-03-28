@@ -124,10 +124,11 @@ class TimerView extends Component {
                         if (this.props.settings.vibrations) {
                             Vibration.vibrate(500)
                         }
-                        if (this.props.settings.sounds) {
+                        if (this.props.settings.warningSounds) {
                             timesUp.play()
                         }
                     }
+                    console.log(this.props.timers[otherPlayer].time)
                 }
             }
         }, 50)
@@ -158,7 +159,7 @@ class TimerView extends Component {
 
     onPress(playerKey) {
         if (this.isActive(playerKey)) {
-            if (this.props.settings.sounds) {
+            if (this.props.settings.tapSounds) {
                 click.stop(() => click.play());
             }
             if (this.props.settings.vibrations) {
