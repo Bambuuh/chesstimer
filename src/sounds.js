@@ -14,4 +14,11 @@ const timesUp = new Sound('time_up_sound.mp3', Sound.MAIN_BUNDLE, (error) => {
     }
 });
 
-export { click, timesUp }
+const timeWarning = new Sound('warning.mp3', Sound.MAIN_BUNDLE, (error) => {
+    if (error) {
+        console.log('failed to load the sound', error);
+        return;
+    }
+});
+
+export { click, timesUp, timeWarning }

@@ -6,7 +6,7 @@ import KeepAwake from 'react-native-keep-awake'
 import { updateTimer, setActivePlayer, togglePaused, resetTimers, addTime, reduceAddTime, addMove, setTimers } from '../../actions/timerActions'
 import { resetWarnings, triggerWarning } from '../../actions/settingsActions'
 
-import { click, timesUp } from '../../sounds'
+import { click, timesUp, timeWarning } from '../../sounds'
 
 import Timer from '../Timer'
 import Button from '../Button'
@@ -137,7 +137,7 @@ class TimerView extends Component {
                         const key = `${hours}${minutes}${seconds}`
                         const warning = this.props.settings.warnings[key]
                         if (warning && !warning.triggered) {
-                            console.log('sound!')
+                            timeWarning.stop(() => timeWarning.play());
                             this.props.triggerWarning(key)
                         }
                     }
